@@ -1,0 +1,9 @@
+{
+    "admin": false,
+    "description": "BPMN Files",
+    "display_name": "bpmn",
+    "display_order": 0,
+    "parent_groups": null,
+    "process_groups": [],
+    "process_models": []
+}
