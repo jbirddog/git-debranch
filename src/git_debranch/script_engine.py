@@ -18,6 +18,10 @@ def git_fetch_and_prune(_params, task_data):
     
 def subprocess_run(params, task_data):
     args = params["args"]["value"]
-    result = subprocess.run(args, capture_output=True)
-    print(result)
-    return "{}"
+    subprocess_result = subprocess.run(args, capture_output=True)
+    result = {
+        "returncode": subprocess_result.returncode,
+        "stdout": subprocess_result.stdout.decode("utf-8"),
+        "stderr": subprocess_result.stderr.decode("utf-8"),
+    }
+    return json.dumps(result)
