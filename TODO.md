@@ -12,3 +12,4 @@
 1. CI
    1. run tests
    1. push to pypi
+1. move main out of __init__.py, into some package that matches setup.py key?

@@ -1,4 +1,12 @@
+import sys
+
 import git_debranch.workflow
 
 def main():
-    workflow.run()
+    result = workflow.run()
+
+    if result.stderr:
+        print(result.stderr, file=sys.stderr)
+    if result.stdout:
+        print(result.stdout)
+    exit(result.returncode)

@@ -8,4 +8,4 @@ def run_workflow(workflow):
             break
         task.run()
         workflow.refresh_waiting_tasks()
-    return workflow.data
+    return workflow.is_completed(), workflow.data

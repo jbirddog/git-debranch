@@ -5,50 +5,88 @@
       <bpmn:outgoing>Flow_1ahli11</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_1ahli11" sourceRef="StartEvent_1" targetRef="fetch_and_prune" />
-    <bpmn:endEvent id="Event_1yutv0y">
-      <bpmn:incoming>Flow_1ragzft</bpmn:incoming>
-    </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1ragzft" sourceRef="Activity_0mnssun" targetRef="Event_1yutv0y" />
-    <bpmn:scriptTask id="Activity_0mnssun">
-      <bpmn:incoming>Flow_150w3w9</bpmn:incoming>
-      <bpmn:outgoing>Flow_1ragzft</bpmn:outgoing>
-      <bpmn:script>x=1</bpmn:script>
-    </bpmn:scriptTask>
-    <bpmn:sequenceFlow id="Flow_150w3w9" sourceRef="fetch_and_prune" targetRef="Activity_0mnssun" />
     <bpmn:serviceTask id="fetch_and_prune" name="Fetch and prune branches">
       <bpmn:extensionElements>
-        <spiffworkflow:serviceTaskOperator id="git/FetchAndPrune" resultVariable="git_fetch_and_prune_result" />
+        <spiffworkflow:serviceTaskOperator id="git/FetchAndPrune" resultVariable="result" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1ahli11</bpmn:incoming>
-      <bpmn:outgoing>Flow_150w3w9</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0j1z1km</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_0isdmhq" default="Flow_0xnfryu">
+      <bpmn:incoming>Flow_0j1z1km</bpmn:incoming>
+      <bpmn:outgoing>Flow_0qc75iu</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0xnfryu</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0j1z1km" sourceRef="fetch_and_prune" targetRef="Gateway_0isdmhq" />
+    <bpmn:endEvent id="Event_1agmbkm">
+      <bpmn:incoming>Flow_0qc75iu</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_0qc75iu" sourceRef="Gateway_0isdmhq" targetRef="Event_1agmbkm">
+      <bpmn:conditionExpression>result["returncode"] != 0</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_0xnfryu" sourceRef="Gateway_0isdmhq" targetRef="Activity_1s1v6xb" />
+    <bpmn:endEvent id="Event_1wlwe0w">
+      <bpmn:incoming>Flow_11gfzkq</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_11gfzkq" sourceRef="Activity_1s1v6xb" targetRef="Event_1wlwe0w" />
+    <bpmn:scriptTask id="Activity_1s1v6xb">
+      <bpmn:incoming>Flow_0xnfryu</bpmn:incoming>
+      <bpmn:outgoing>Flow_11gfzkq</bpmn:outgoing>
+      <bpmn:script>True</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:textAnnotation id="TextAnnotation_02th9dr">
+      <bpmn:text>git operation was not successful, best to bail now</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_10ok3vb" sourceRef="Flow_0qc75iu" targetRef="TextAnnotation_02th9dr" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="git-debranch">
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1yutv0y_di" bpmnElement="Event_1yutv0y">
-        <dc:Bounds x="552" y="159" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1thf18f_di" bpmnElement="Activity_0mnssun">
-        <dc:Bounds x="390" y="137" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0nuw7ym_di" bpmnElement="fetch_and_prune">
         <dc:Bounds x="250" y="137" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0isdmhq_di" bpmnElement="Gateway_0isdmhq" isMarkerVisible="true">
+        <dc:Bounds x="385" y="152" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1agmbkm_di" bpmnElement="Event_1agmbkm">
+        <dc:Bounds x="392" y="32" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1wlwe0w_di" bpmnElement="Event_1wlwe0w">
+        <dc:Bounds x="612" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1mlfw1s_di" bpmnElement="Activity_1s1v6xb">
+        <dc:Bounds x="470" y="137" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_02th9dr_di" bpmnElement="TextAnnotation_02th9dr">
+        <dc:Bounds x="460" y="30" width="100" height="70" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1ahli11_di" bpmnElement="Flow_1ahli11">
         <di:waypoint x="215" y="177" />
         <di:waypoint x="250" y="177" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1ragzft_di" bpmnElement="Flow_1ragzft">
-        <di:waypoint x="490" y="177" />
-        <di:waypoint x="552" y="177" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_150w3w9_di" bpmnElement="Flow_150w3w9">
+      <bpmndi:BPMNEdge id="Flow_0j1z1km_di" bpmnElement="Flow_0j1z1km">
         <di:waypoint x="350" y="177" />
-        <di:waypoint x="390" y="177" />
+        <di:waypoint x="385" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0qc75iu_di" bpmnElement="Flow_0qc75iu">
+        <di:waypoint x="410" y="152" />
+        <di:waypoint x="410" y="68" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0xnfryu_di" bpmnElement="Flow_0xnfryu">
+        <di:waypoint x="435" y="177" />
+        <di:waypoint x="470" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_11gfzkq_di" bpmnElement="Flow_11gfzkq">
+        <di:waypoint x="570" y="177" />
+        <di:waypoint x="612" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_10ok3vb_di" bpmnElement="Association_10ok3vb">
+        <di:waypoint x="410" y="110" />
+        <di:waypoint x="460" y="78" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
