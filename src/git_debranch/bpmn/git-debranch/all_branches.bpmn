@@ -24,14 +24,49 @@
       <bpmn:extensionElements>
         <spiffworkflow:unitTests>
           <spiffworkflow:unitTest id="happiest_of_paths">
-            <spiffworkflow:inputJson>{}</spiffworkflow:inputJson>
-            <spiffworkflow:expectedOutputJson>{}</spiffworkflow:expectedOutputJson>
+            <spiffworkflow:inputJson>{
+  "merged_branches_result": {
+    "returncode": 0,
+    "stdout": " a\n b\n c\n\n",
+    "stderr": ""
+  },
+  "unmerged_branches_result": {
+    "returncode": 0,
+    "stdout": " d\n e\n f\n\n",
+    "stderr": ""
+  }
+}</spiffworkflow:inputJson>
+            <spiffworkflow:expectedOutputJson>{
+  "merged_branches_result": {
+    "returncode": 0,
+    "stderr": "",
+    "stdout": " a\n b\n c\n\n"
+  },
+  "result": {
+    "merged": [
+      " a",
+      " b",
+      " c"
+    ],
+    "returncode": 0,
+    "unmerged": [
+      " d",
+      " e",
+      " f"
+    ]
+  },
+  "unmerged_branches_result": {
+    "returncode": 0,
+    "stderr": "",
+    "stdout": " d\n e\n f\n\n"
+  }
+}</spiffworkflow:expectedOutputJson>
           </spiffworkflow:unitTest>
         </spiffworkflow:unitTests>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0edbiko</bpmn:incoming>
       <bpmn:outgoing>Flow_04ggq0k</bpmn:outgoing>
-      <bpmn:script># pre-conditions of this script
+      <bpmn:script># pre-conditions of this script, would love to move to pre script
 assert merged_branches_result["returncode"] == 0
 assert unmerged_branches_result["returncode"] == 0
 
@@ -40,14 +75,17 @@ def to_list(result):
     non_empty_parts = filter(len, parts)
     return list(non_empty_parts)
 
-merged_branches = to_list(merged_branches_result)
-unmerged_branches = to_list(unmerged_branches_result)
+def build_result():
+    merged_branches = to_list(merged_branches_result)
+    unmerged_branches = to_list(unmerged_branches_result)
 
-result = {
-    "returncode": 0,
-    "merged": merged_branches,
-    "unmerged": unmerged_branches,
-}</bpmn:script>
+    return {
+        "returncode": 0,
+        "merged": merged_branches,
+        "unmerged": unmerged_branches,
+    }
+
+result = build_result()</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:serviceTask id="Activity_09co3ki" name="Get all merged branches">
       <bpmn:extensionElements>
@@ -80,13 +118,20 @@ result = {
     <bpmn:sequenceFlow id="Flow_18ez3n1" sourceRef="Activity_0jtu6nb" targetRef="Gateway_0pemmv3" />
     <bpmn:sequenceFlow id="Flow_04ggq0k" sourceRef="Activity_1rwssw3" targetRef="Gateway_0pemmv3" />
     <bpmn:endEvent id="Event_1y1qa7g">
-      <bpmn:incoming>Flow_01pmr38</bpmn:incoming>
+      <bpmn:incoming>Flow_1w9g09q</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_01pmr38" sourceRef="Gateway_0pemmv3" targetRef="Event_1y1qa7g" />
+    <bpmn:sequenceFlow id="Flow_01pmr38" sourceRef="Gateway_0pemmv3" targetRef="Activity_0bjc1ye" />
     <bpmn:scriptTask id="Activity_0jtu6nb" name="Promote error to result">
       <bpmn:incoming>Flow_1sqrwy8</bpmn:incoming>
       <bpmn:outgoing>Flow_18ez3n1</bpmn:outgoing>
       <bpmn:script>assert False</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_1w9g09q" sourceRef="Activity_0bjc1ye" targetRef="Event_1y1qa7g" />
+    <bpmn:scriptTask id="Activity_0bjc1ye" name="Variable cleanup">
+      <bpmn:incoming>Flow_01pmr38</bpmn:incoming>
+      <bpmn:outgoing>Flow_1w9g09q</bpmn:outgoing>
+      <bpmn:script>del(merged_branches_result)
+del(unmerged_branches_result)</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:textAnnotation id="TextAnnotation_14hvdjh">
       <bpmn:text>If either git operation fails, return an error, else return the merged and unmerged branch lists.</bpmn:text>
@@ -142,11 +187,15 @@ result = {
       <bpmndi:BPMNShape id="Gateway_0pemmv3_di" bpmnElement="Gateway_0pemmv3" isMarkerVisible="true">
         <dc:Bounds x="875" y="152" width="50" height="50" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1y1qa7g_di" bpmnElement="Event_1y1qa7g">
-        <dc:Bounds x="982" y="159" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0cytush_di" bpmnElement="Activity_0jtu6nb">
         <dc:Bounds x="720" y="60" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1y1qa7g_di" bpmnElement="Event_1y1qa7g">
+        <dc:Bounds x="1082" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_09otoif_di" bpmnElement="Activity_0bjc1ye">
+        <dc:Bounds x="950" y="137" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_06jn47e_di" bpmnElement="Association_06jn47e">
@@ -211,7 +260,11 @@ result = {
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_01pmr38_di" bpmnElement="Flow_01pmr38">
         <di:waypoint x="925" y="177" />
-        <di:waypoint x="982" y="177" />
+        <di:waypoint x="950" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1w9g09q_di" bpmnElement="Flow_1w9g09q">
+        <di:waypoint x="1050" y="177" />
+        <di:waypoint x="1082" y="177" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
