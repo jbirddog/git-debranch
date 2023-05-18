@@ -1,13 +1,30 @@
 import os
 import pkgutil
 
+from SpiffWorkflow.bpmn.workflow import BpmnWorkflow
 from SpiffWorkflow.spiff.parser.process import SpiffBpmnParser
+from SpiffWorkflow.task import TaskState
 
 def run():
-    print(f"git-debranch: {_workflow()}")
+    workflow = _workflow()
+    print(f"git-debranch: {_run(workflow)}")
 
 #
-# our internal vocabulary
+# extract to runner.py
+#
+
+def _run(workflow):
+    while not workflow.is_completed():
+        tasks = workflow.get_tasks(TaskState.READY)
+        task = tasks[0] if len(tasks) > 0 else None
+        if task is None:
+            break
+        task.run()
+        workflow.refresh_waiting_tasks()
+    return workflow.data
+    
+#
+# extract to loader.py
 #
     
 def _bpmn_data_path(filename):
@@ -36,4 +53,7 @@ def _parser():
     
 def _workflow():
     parser = _parser()
-
+    process_name = "git-debranch"
+    top_level = parser.get_spec(process_name)
+    subprocesses = parser.get_subprocess_specs(process_name)
+    return BpmnWorkflow(top_level, subprocesses)

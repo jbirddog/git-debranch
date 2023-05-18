@@ -5,7 +5,6 @@
 1. command line args
    1. --dry-run
 1. call activity to interact with git service task, check error, bail
-1. code to run bpmn files
 1. unit test with mock git service task
 1. README.md
    1. installing
