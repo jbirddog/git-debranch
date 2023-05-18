@@ -1,6 +1,5 @@
 # TODOs
 
-1. read bpmn file from package
 1. custom service task delegate
 1. custom user task json to do $EDITOR dance
 1. command line args
