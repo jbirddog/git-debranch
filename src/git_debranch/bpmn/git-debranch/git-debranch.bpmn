@@ -17,11 +17,7 @@
     <bpmn:sequenceFlow id="Flow_150w3w9" sourceRef="fetch_and_prune" targetRef="Activity_0mnssun" />
     <bpmn:serviceTask id="fetch_and_prune" name="Fetch and prune branches">
       <bpmn:extensionElements>
-        <spiffworkflow:serviceTaskOperator id="subprocess/Run">
-          <spiffworkflow:parameters>
-            <spiffworkflow:parameter id="args" type="str" value="[&#34;git&#34;, &#34;fetch&#34;, &#34;-p&#34;]" />
-          </spiffworkflow:parameters>
-        </spiffworkflow:serviceTaskOperator>
+        <spiffworkflow:serviceTaskOperator id="git/FetchAndPrune" />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1ahli11</bpmn:incoming>
       <bpmn:outgoing>Flow_150w3w9</bpmn:outgoing>
