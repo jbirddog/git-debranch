@@ -24,7 +24,7 @@ setup(
 
     package_data = {
         "git_debranch": [
-            "assets/bpmn/**/*.bpmn",
+            "assets/bpmn/git-debranch/git-debranch.bpmn",
         ],
     },
 
