@@ -1,38 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_96f6665" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.0.0-dev">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:spiffworkflow="http://spiffworkflow.org/bpmn/schema/1.0/core" id="Definitions_96f6665" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.0.0-dev">
   <bpmn:process id="git-debranch" name="Git Debranch" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_1ahli11</bpmn:outgoing>
     </bpmn:startEvent>
-    <bpmn:sequenceFlow id="Flow_1ahli11" sourceRef="StartEvent_1" targetRef="Activity_0mnssun" />
+    <bpmn:sequenceFlow id="Flow_1ahli11" sourceRef="StartEvent_1" targetRef="fetch_and_prune" />
     <bpmn:endEvent id="Event_1yutv0y">
       <bpmn:incoming>Flow_1ragzft</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1ragzft" sourceRef="Activity_0mnssun" targetRef="Event_1yutv0y" />
     <bpmn:scriptTask id="Activity_0mnssun">
-      <bpmn:incoming>Flow_1ahli11</bpmn:incoming>
+      <bpmn:incoming>Flow_150w3w9</bpmn:incoming>
       <bpmn:outgoing>Flow_1ragzft</bpmn:outgoing>
       <bpmn:script>x=1</bpmn:script>
     </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_150w3w9" sourceRef="fetch_and_prune" targetRef="Activity_0mnssun" />
+    <bpmn:serviceTask id="fetch_and_prune" name="Fetch and prune branches">
+      <bpmn:extensionElements>
+        <spiffworkflow:serviceTaskOperator id="subprocess/Run">
+          <spiffworkflow:parameters>
+            <spiffworkflow:parameter id="args" type="str" value="[&#34;git&#34;, &#34;fetch&#34;, &#34;-p&#34;]" />
+          </spiffworkflow:parameters>
+        </spiffworkflow:serviceTaskOperator>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1ahli11</bpmn:incoming>
+      <bpmn:outgoing>Flow_150w3w9</bpmn:outgoing>
+    </bpmn:serviceTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="git-debranch">
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1thf18f_di" bpmnElement="Activity_0mnssun">
-        <dc:Bounds x="270" y="137" width="100" height="80" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1yutv0y_di" bpmnElement="Event_1yutv0y">
-        <dc:Bounds x="412" y="159" width="36" height="36" />
+        <dc:Bounds x="552" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1thf18f_di" bpmnElement="Activity_0mnssun">
+        <dc:Bounds x="390" y="137" width="100" height="80" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0nuw7ym_di" bpmnElement="fetch_and_prune">
+        <dc:Bounds x="250" y="137" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1ahli11_di" bpmnElement="Flow_1ahli11">
         <di:waypoint x="215" y="177" />
-        <di:waypoint x="270" y="177" />
+        <di:waypoint x="250" y="177" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ragzft_di" bpmnElement="Flow_1ragzft">
-        <di:waypoint x="370" y="177" />
-        <di:waypoint x="412" y="177" />
+        <di:waypoint x="490" y="177" />
+        <di:waypoint x="552" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_150w3w9_di" bpmnElement="Flow_150w3w9">
+        <di:waypoint x="350" y="177" />
+        <di:waypoint x="390" y="177" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
