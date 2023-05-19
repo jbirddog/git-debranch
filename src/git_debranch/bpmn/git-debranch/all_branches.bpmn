@@ -121,13 +121,91 @@ result = build_result()</bpmn:script>
       <bpmn:incoming>Flow_1w9g09q</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_01pmr38" sourceRef="Gateway_0pemmv3" targetRef="Activity_0bjc1ye" />
-    <bpmn:scriptTask id="Activity_0jtu6nb" name="Promote error to result">
+    <bpmn:scriptTask id="Activity_0jtu6nb" name="Promote an error to result">
+      <bpmn:extensionElements>
+        <spiffworkflow:unitTests>
+          <spiffworkflow:unitTest id="merged_and_unmerged_failure">
+            <spiffworkflow:inputJson>{
+  "merged_branches_result": {
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "merged error"
+  },
+  "unmerged_branches_result": {
+    "returncode": 2,
+    "stdout": "",
+    "stderr": "unmerged_error"
+  }
+}</spiffworkflow:inputJson>
+            <spiffworkflow:expectedOutputJson>{
+  "merged_branches_result": {
+    "returncode": 1,
+    "stderr": "merged error",
+    "stdout": ""
+  },
+  "result": {
+    "returncode": 1,
+    "stderr": "merged error",
+    "stdout": ""
+  },
+  "unmerged_branches_result": {
+    "returncode": 2,
+    "stderr": "unmerged_error",
+    "stdout": ""
+  }
+}</spiffworkflow:expectedOutputJson>
+          </spiffworkflow:unitTest>
+          <spiffworkflow:unitTest id="merged_failture">
+            <spiffworkflow:inputJson>{}</spiffworkflow:inputJson>
+            <spiffworkflow:expectedOutputJson>{
+  "merged_branches_result": {
+    "returncode": 1,
+    "stderr": "merged error",
+    "stdout": ""
+  },
+  "result": {
+    "returncode": 1,
+    "stderr": "merged error",
+    "stdout": ""
+  },
+  "unmerged_branches_result": {
+    "returncode": 2,
+    "stderr": "unmerged_error",
+    "stdout": ""
+  }
+}</spiffworkflow:expectedOutputJson>
+          </spiffworkflow:unitTest>
+          <spiffworkflow:unitTest id="unmerged_failure">
+            <spiffworkflow:inputJson>{}</spiffworkflow:inputJson>
+            <spiffworkflow:expectedOutputJson>{
+  "merged_branches_result": {
+    "returncode": 1,
+    "stderr": "merged error",
+    "stdout": ""
+  },
+  "result": {
+    "returncode": 1,
+    "stderr": "merged error",
+    "stdout": ""
+  },
+  "unmerged_branches_result": {
+    "returncode": 2,
+    "stderr": "unmerged_error",
+    "stdout": ""
+  }
+}</spiffworkflow:expectedOutputJson>
+          </spiffworkflow:unitTest>
+        </spiffworkflow:unitTests>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1sqrwy8</bpmn:incoming>
       <bpmn:outgoing>Flow_18ez3n1</bpmn:outgoing>
-      <bpmn:script>assert False</bpmn:script>
+      <bpmn:script># pre-conditions of this script, would love to move to pre script
+assert merged_branches_result["returncode"] != 0 or unmerged_branches_result["returncode"] != 0
+
+result = merged_branches_result if merged_branches_result["returncode"] else unmerged_branches_result</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="Flow_1w9g09q" sourceRef="Activity_0bjc1ye" targetRef="Event_1y1qa7g" />
-    <bpmn:scriptTask id="Activity_0bjc1ye" name="Variable cleanup">
+    <bpmn:scriptTask id="Activity_0bjc1ye" name="Cleanup variables">
       <bpmn:incoming>Flow_01pmr38</bpmn:incoming>
       <bpmn:outgoing>Flow_1w9g09q</bpmn:outgoing>
       <bpmn:script>del(merged_branches_result)
@@ -141,19 +219,11 @@ del(unmerged_branches_result)</bpmn:script>
       <bpmn:text>We want to present both merged and unmerged branches. As far as I know this requires two calls to git branches.</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_06jn47e" sourceRef="Gateway_07vk4jr" targetRef="TextAnnotation_1b81gty" />
-    <bpmn:textAnnotation id="TextAnnotation_1o9wtlx">
-      <bpmn:text>TODO: this is not done yet</bpmn:text>
-    </bpmn:textAnnotation>
-    <bpmn:association id="Association_0e5yybf" sourceRef="Activity_0jtu6nb" targetRef="TextAnnotation_1o9wtlx" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="get_all_branches">
       <bpmndi:BPMNShape id="TextAnnotation_1b81gty_di" bpmnElement="TextAnnotation_1b81gty">
         <dc:Bounds x="160" y="-63" width="100" height="142" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_1o9wtlx_di" bpmnElement="TextAnnotation_1o9wtlx">
-        <dc:Bounds x="820" y="-20" width="100" height="41" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_14hvdjh_di" bpmnElement="TextAnnotation_14hvdjh">
@@ -192,19 +262,15 @@ del(unmerged_branches_result)</bpmn:script>
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1y1qa7g_di" bpmnElement="Event_1y1qa7g">
-        <dc:Bounds x="1082" y="159" width="36" height="36" />
+        <dc:Bounds x="1102" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_09otoif_di" bpmnElement="Activity_0bjc1ye">
-        <dc:Bounds x="950" y="137" width="100" height="80" />
+        <dc:Bounds x="960" y="137" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Association_06jn47e_di" bpmnElement="Association_06jn47e">
         <di:waypoint x="283" y="159" />
         <di:waypoint x="255" y="79" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_0e5yybf_di" bpmnElement="Association_0e5yybf">
-        <di:waypoint x="808" y="60" />
-        <di:waypoint x="845" y="21" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_08z4539_di" bpmnElement="Association_08z4539">
         <di:waypoint x="635" y="157" />
@@ -260,11 +326,11 @@ del(unmerged_branches_result)</bpmn:script>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_01pmr38_di" bpmnElement="Flow_01pmr38">
         <di:waypoint x="925" y="177" />
-        <di:waypoint x="950" y="177" />
+        <di:waypoint x="960" y="177" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1w9g09q_di" bpmnElement="Flow_1w9g09q">
-        <di:waypoint x="1050" y="177" />
-        <di:waypoint x="1082" y="177" />
+        <di:waypoint x="1060" y="177" />
+        <di:waypoint x="1102" y="177" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
