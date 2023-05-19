@@ -29,7 +29,7 @@
       <bpmn:incoming>Flow_11gfzkq</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_11gfzkq" sourceRef="Activity_1s1v6xb" targetRef="Event_1wlwe0w" />
-    <bpmn:scriptTask id="Activity_1s1v6xb">
+    <bpmn:scriptTask id="Activity_1s1v6xb" name="Isolate the current branch">
       <bpmn:incoming>Flow_11swttm</bpmn:incoming>
       <bpmn:outgoing>Flow_11gfzkq</bpmn:outgoing>
       <bpmn:script>True</bpmn:script>
@@ -75,11 +75,9 @@
       <bpmndi:BPMNShape id="Event_1agmbkm_di" bpmnElement="Event_1agmbkm">
         <dc:Bounds x="392" y="32" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1wlwe0w_di" bpmnElement="Event_1wlwe0w">
-        <dc:Bounds x="872" y="159" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1mlfw1s_di" bpmnElement="Activity_1s1v6xb">
         <dc:Bounds x="720" y="137" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0z9jlas" bpmnElement="Gateway_1p0jed3" isMarkerVisible="true">
         <dc:Bounds x="625" y="152" width="50" height="50" />
@@ -99,6 +97,9 @@
         <dc:Bounds x="720" y="30" width="100" height="70" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1wlwe0w_di" bpmnElement="Event_1wlwe0w">
+        <dc:Bounds x="1012" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_1ahli11_di" bpmnElement="Flow_1ahli11">
         <di:waypoint x="215" y="177" />
         <di:waypoint x="250" y="177" />
@@ -117,7 +118,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_11gfzkq_di" bpmnElement="Flow_11gfzkq">
         <di:waypoint x="820" y="177" />
-        <di:waypoint x="872" y="177" />
+        <di:waypoint x="1012" y="177" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_0xjlr6e" bpmnElement="Flow_1rwpp5i">
         <di:waypoint x="650" y="152" />
