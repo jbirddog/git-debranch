@@ -67,6 +67,7 @@
       <bpmn:incoming>Flow_0edbiko</bpmn:incoming>
       <bpmn:outgoing>Flow_04ggq0k</bpmn:outgoing>
       <bpmn:script># pre-conditions of this script, would love to move to pre script
+# or have contract support
 assert merged_branches_result["returncode"] == 0
 assert unmerged_branches_result["returncode"] == 0
 
