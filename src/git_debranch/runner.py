@@ -1,3 +1,7 @@
+import os
+import subprocess
+import tempfile
+
 from SpiffWorkflow.task import TaskState
 
 from git_debranch.loader import load_manual_task_config
@@ -17,8 +21,16 @@ def run_workflow(workflow):
 
 def _run_manual_task(task):
     config = load_manual_task_config(task.task_spec.name)
-    variable_to_edit = config["edit"]
-    variable = task.data[variable_to_edit]
-    print(variable)
-    input()
+    _edit_task_data(task.data, config["edit"])
     task.run()
+
+def _edit_task_data(task_data, variable_to_edit):
+    value = task_data[variable_to_edit]
+    editor = os.environ.get("EDITOR", "vi")
+    with tempfile.NamedTemporaryFile() as tf:
+        tf.write(value.encode("utf-8"))
+        tf.flush()
+        subprocess.run([editor, tf.name])
+        tf.seek(0)
+        value = tf.read().decode("utf-8")
+    task_data[variable_to_edit] = value
