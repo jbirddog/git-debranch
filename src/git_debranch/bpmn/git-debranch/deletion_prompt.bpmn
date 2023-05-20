@@ -12,16 +12,18 @@
     <bpmn:scriptTask id="Activity_1sjkjk0" name="Build branch report">
       <bpmn:incoming>Flow_0p7er6v</bpmn:incoming>
       <bpmn:outgoing>Flow_0pqk0gt</bpmn:outgoing>
-      <bpmn:script>branch_report = """
-#
-# git debranch confirmation
-#
+      <bpmn:script>def build_branch_report():
+    lines = [
+        "# The following branches appear safe to delete. They exist locally ",
+        "# but not on any remote and have been merged.",
+        "",
+    ]
 
-#
-# somebranch
-# anotherbranch
-#
-"""
+    lines.extend(branches["merged_local_only"])
+
+    return "\n".join(lines)
+
+branch_report = build_branch_report()
 
 del(branches)</bpmn:script>
     </bpmn:scriptTask>
