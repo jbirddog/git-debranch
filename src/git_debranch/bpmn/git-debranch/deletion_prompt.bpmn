@@ -12,27 +12,45 @@
     <bpmn:scriptTask id="Activity_1sjkjk0" name="Build branch report">
       <bpmn:incoming>Flow_0p7er6v</bpmn:incoming>
       <bpmn:outgoing>Flow_0pqk0gt</bpmn:outgoing>
-      <bpmn:script>def add_section(lines, section_lines, header):
-    if len(section_lines) &gt; 0:
-        lines.extend(header)
-        lines.append("")
-        lines.extend(section_lines)
+      <bpmn:script>def add_section(lines, section_lines, comment, header):
+    if len(section_lines) == 0:
+        return
+    lines.extend(header)
+    lines.append("")
+    if comment:
+        section_lines = map(lambda l: f"# {l}", section_lines)
+    lines.extend(section_lines)
+    lines.append("")
 
 def build_branch_report():
     lines = [
-        "# git debranch",
-        "#",
-        "# Select branches to delete.",
-        "#",
-        "# Any lines that are non empty or do not start with a # are assumed to ",
-        "# be branch names, one per line. Each uncommented branch name will be ",
-        "# marked for deletion.",
+        "## git debranch",
+        "##",
+        "## Select branches to delete.",
+        "##",
+        "## Any lines that are non empty and do not start with a # are assumed to ",
+        "## be branch names, one per line. Each uncommented branch name will be ",
+        "## marked for deletion.",
         "",
     ]
 
-    add_section(lines, branches["merged_local_only"], [
-        "# The following branches appear safe to delete. They exist locally ",
-        "# but not on any remote and have been merged.",
+    add_section(lines, branches["merged_local_only"], False, [
+        "## The following branches appear safe to delete. They exist locally ",
+        "## but not on any remote and have been merged:",
+    ])
+
+    add_section(lines, branches["merged_has_remote_branch"], True, [
+        "## The following branches exist locally as well as on a remote and ",
+        "## have been merged:",
+    ])
+
+    add_section(lines, branches["unmerged_local_only"], True, [
+        "## The following branches only exist locally but have not been merged:",
+    ])
+
+    add_section(lines, branches["unmerged_has_remote_branch"], True, [
+        "## The following branches exist locally as well as on a remote and ",
+        "## have not been merged:",
     ])
 
     return "\n".join(lines)
