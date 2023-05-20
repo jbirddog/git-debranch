@@ -19,3 +19,4 @@ def run():
     returncode = result.get("returncode", 0 if completed else -1)
     print(data)
     return WorkflowResult(completed, stderr, stdout, returncode)
+ 

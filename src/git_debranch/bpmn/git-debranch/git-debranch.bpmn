@@ -5,14 +5,8 @@
       <bpmn:outgoing>Flow_13piout</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:endEvent id="Event_1wlwe0w">
-      <bpmn:incoming>Flow_11gfzkq</bpmn:incoming>
+      <bpmn:incoming>Flow_1026mcr</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_11gfzkq" sourceRef="Activity_1s1v6xb" targetRef="Event_1wlwe0w" />
-    <bpmn:scriptTask id="Activity_1s1v6xb" name="Isolate the current branch">
-      <bpmn:incoming>Flow_11swttm</bpmn:incoming>
-      <bpmn:outgoing>Flow_11gfzkq</bpmn:outgoing>
-      <bpmn:script>True</bpmn:script>
-    </bpmn:scriptTask>
     <bpmn:exclusiveGateway id="Gateway_1p0jed3" default="Flow_11swttm">
       <bpmn:incoming>Flow_1b4tqmf</bpmn:incoming>
       <bpmn:outgoing>Flow_1rwpp5i</bpmn:outgoing>
@@ -24,26 +18,34 @@
     <bpmn:sequenceFlow id="Flow_1rwpp5i" sourceRef="Gateway_1p0jed3" targetRef="Event_132ve90">
       <bpmn:conditionExpression>result["returncode"] != 0</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:sequenceFlow id="Flow_11swttm" sourceRef="Gateway_1p0jed3" targetRef="Activity_1s1v6xb" />
+    <bpmn:sequenceFlow id="Flow_11swttm" sourceRef="Gateway_1p0jed3" targetRef="Activity_0k872kx" />
     <bpmn:sequenceFlow id="Flow_1b4tqmf" sourceRef="Activity_19gnuol" targetRef="Gateway_1p0jed3" />
     <bpmn:callActivity id="Activity_19gnuol" name="Get all branches" calledElement="get_all_branches">
       <bpmn:incoming>Flow_13piout</bpmn:incoming>
       <bpmn:outgoing>Flow_1b4tqmf</bpmn:outgoing>
     </bpmn:callActivity>
     <bpmn:sequenceFlow id="Flow_13piout" sourceRef="StartEvent_1" targetRef="Activity_19gnuol" />
+    <bpmn:sequenceFlow id="Flow_1026mcr" sourceRef="Activity_0k872kx" targetRef="Event_1wlwe0w" />
+    <bpmn:callActivity id="Activity_0k872kx" name="Parse branches" calledElement="branch_parser">
+      <bpmn:incoming>Flow_11swttm</bpmn:incoming>
+      <bpmn:outgoing>Flow_1026mcr</bpmn:outgoing>
+    </bpmn:callActivity>
     <bpmn:textAnnotation id="TextAnnotation_1b3js8g">
       <bpmn:text>git operation was not successful, best to bail now</bpmn:text>
     </bpmn:textAnnotation>
     <bpmn:association id="Association_0h4hzko" sourceRef="Flow_1rwpp5i" targetRef="TextAnnotation_1b3js8g" />
+    <bpmn:textAnnotation id="TextAnnotation_02uv528">
+      <bpmn:text>TODO: is there a way to make the subprocess terminate the process? This would be cleaner at the top level</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_1ykz79g" sourceRef="Flow_1rwpp5i" targetRef="TextAnnotation_02uv528" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="git-debranch">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="382" y="162" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1wlwe0w_di" bpmnElement="Event_1wlwe0w">
         <dc:Bounds x="1012" y="159" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_1mlfw1s_di" bpmnElement="Activity_1s1v6xb">
-        <dc:Bounds x="720" y="137" width="100" height="80" />
-        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0z9jlas" bpmnElement="Gateway_1p0jed3" isMarkerVisible="true">
         <dc:Bounds x="625" y="152" width="50" height="50" />
@@ -59,32 +61,41 @@
         <dc:Bounds x="720" y="30" width="100" height="70" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="382" y="162" width="36" height="36" />
+      <bpmndi:BPMNShape id="TextAnnotation_02uv528_di" bpmnElement="TextAnnotation_02uv528">
+        <dc:Bounds x="480" y="-30" width="100" height="127" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge id="Flow_11gfzkq_di" bpmnElement="Flow_11gfzkq">
-        <di:waypoint x="820" y="177" />
-        <di:waypoint x="1012" y="177" />
-      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Activity_0f41p31_di" bpmnElement="Activity_0k872kx">
+        <dc:Bounds x="740" y="137" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="BPMNEdge_0xjlr6e" bpmnElement="Flow_1rwpp5i">
         <di:waypoint x="650" y="152" />
         <di:waypoint x="650" y="68" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_11swttm_di" bpmnElement="Flow_11swttm">
         <di:waypoint x="675" y="177" />
-        <di:waypoint x="720" y="177" />
+        <di:waypoint x="740" y="177" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1b4tqmf_di" bpmnElement="Flow_1b4tqmf">
         <di:waypoint x="580" y="177" />
         <di:waypoint x="625" y="177" />
       </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_13piout_di" bpmnElement="Flow_13piout">
+        <di:waypoint x="418" y="180" />
+        <di:waypoint x="480" y="180" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_03yfwrz" bpmnElement="Association_0h4hzko">
         <di:waypoint x="650" y="110" />
         <di:waypoint x="720" y="78" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_13piout_di" bpmnElement="Flow_13piout">
-        <di:waypoint x="418" y="180" />
-        <di:waypoint x="480" y="180" />
+      <bpmndi:BPMNEdge id="Association_1ykz79g_di" bpmnElement="Association_1ykz79g">
+        <di:waypoint x="650" y="110" />
+        <di:waypoint x="580" y="37" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1026mcr_di" bpmnElement="Flow_1026mcr">
+        <di:waypoint x="840" y="177" />
+        <di:waypoint x="1012" y="177" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

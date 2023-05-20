@@ -43,17 +43,9 @@
     "stdout": " a\n b\n c\n\n"
   },
   "result": {
-    "merged": [
-      " a",
-      " b",
-      " c"
-    ],
+    "merged": " a\n b\n c\n\n",
     "returncode": 0,
-    "unmerged": [
-      " d",
-      " e",
-      " f"
-    ]
+    "unmerged": " d\n e\n f\n\n"
   },
   "unmerged_branches_result": {
     "returncode": 0,
@@ -71,22 +63,11 @@
 assert merged_branches_result["returncode"] == 0
 assert unmerged_branches_result["returncode"] == 0
 
-def to_list(result):
-    parts = result["stdout"].split("\n")
-    non_empty_parts = filter(len, parts)
-    return list(non_empty_parts)
-
-def build_result():
-    merged_branches = to_list(merged_branches_result)
-    unmerged_branches = to_list(unmerged_branches_result)
-
-    return {
-        "returncode": 0,
-        "merged": merged_branches,
-        "unmerged": unmerged_branches,
-    }
-
-result = build_result()</bpmn:script>
+result = {
+    "returncode": 0,
+    "merged": merged_branches_result["stdout"],
+    "unmerged": unmerged_branches_result["stdout"],
+}</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:serviceTask id="Activity_09co3ki" name="Get all merged branches">
       <bpmn:extensionElements>
