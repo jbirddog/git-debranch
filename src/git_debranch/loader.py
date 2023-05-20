@@ -18,7 +18,12 @@ def _bpmn_data_path(filename):
     return os.path.join("bpmn", "git-debranch", filename)
 
 def _bpmn_data_paths():
-    bpmn_filenames = ["git-debranch.bpmn", "all_branches.bpmn", "branch_parser.bpmn"]
+    bpmn_filenames = [
+        "git-debranch.bpmn",
+        "all_branches.bpmn",
+        "branch_parser.bpmn",
+        "deletion_prompt.bpmn",
+    ]
     return map(_bpmn_data_path, bpmn_filenames)
 
 def _get_data_str(data_path):

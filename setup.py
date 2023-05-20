@@ -25,6 +25,7 @@ setup(
     package_data = {
         "git_debranch": [
             "bpmn/**/*.bpmn",
+            "bpmn/**/*.json",
         ],
     },
 
