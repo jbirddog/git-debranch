@@ -1,3 +1,4 @@
+import json
 import os
 import pkgutil
 
@@ -13,7 +14,12 @@ def load_workflow():
     subprocesses = parser.get_subprocess_specs(process_name)
     script_engine = CustomScriptEngine()
     return BpmnWorkflow(top_level, subprocesses, script_engine=script_engine)
-    
+
+def load_manual_task_config(task_name):
+    filename = f"{task_name}.json"
+    json_str = _get_data_str(_bpmn_data_path(filename))
+    return json.loads(json_str)
+
 def _bpmn_data_path(filename):
     return os.path.join("bpmn", "git-debranch", filename)
 
