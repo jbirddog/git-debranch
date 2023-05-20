@@ -12,14 +12,28 @@
     <bpmn:scriptTask id="Activity_1sjkjk0" name="Build branch report">
       <bpmn:incoming>Flow_0p7er6v</bpmn:incoming>
       <bpmn:outgoing>Flow_0pqk0gt</bpmn:outgoing>
-      <bpmn:script>def build_branch_report():
+      <bpmn:script>def add_section(lines, section_lines, header):
+    if len(section_lines) &gt; 0:
+        lines.extend(header)
+        lines.append("")
+        lines.extend(section_lines)
+
+def build_branch_report():
     lines = [
-        "# The following branches appear safe to delete. They exist locally ",
-        "# but not on any remote and have been merged.",
+        "# git debranch",
+        "#",
+        "# Select branches to delete.",
+        "#",
+        "# Any lines that are non empty or do not start with a # are assumed to ",
+        "# be branch names, one per line. Each uncommented branch name will be ",
+        "# marked for deletion.",
         "",
     ]
 
-    lines.extend(branches["merged_local_only"])
+    add_section(lines, branches["merged_local_only"], [
+        "# The following branches appear safe to delete. They exist locally ",
+        "# but not on any remote and have been merged.",
+    ])
 
     return "\n".join(lines)
 
