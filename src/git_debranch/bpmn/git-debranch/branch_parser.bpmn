@@ -149,38 +149,62 @@ unmerged = group_branches(unmerged)</bpmn:script>
   "result": {
     "returncode": 0
   },
+  "branches": {
   "current": "main",
-  "merged_local_only": ["abc"],
-  "unmerged_local_only": ["some_branch"],
-  "merged": {
-    "current": "main",
-    "local": [
-      "abc"
+  "merged_local_only": [
+    "abc"
+  ],
+  "merged_has_remote_branch": [
+    "main"
+  ],
+  "unmerged_local_only": [
+    "some_branch"
+  ],
+  "unmerged_has_remote_branch": [
+    "no-merged-branch"
+  ],
+  "remote": {
+    "main": [
+      "remotes/origin/main"
     ],
-    "remote": {
-      "main": [
-        "remotes/origin/main"
-      ]
-    }
-  },
-  "unmerged": {
-    "local": [
-      "no-merged-branch",
-      "some_branch"
-    ],
-    "remote": {
-      "no-merged-branch": [
-        "remotes/origin/no-merged-branch"
-      ]
-    }
+    "no-merged-branch": [
+      "remotes/origin/no-merged-branch"
+    ]
   }
+}
 }</spiffworkflow:expectedOutputJson>
           </spiffworkflow:unitTest>
         </spiffworkflow:unitTests>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0edxyrj</bpmn:incoming>
       <bpmn:outgoing>Flow_14g5ljd</bpmn:outgoing>
-      <bpmn:script>True</bpmn:script>
+      <bpmn:script>def branch_groups(branch_dict):
+    current = None
+    local_only = []
+    has_remote_branch = []
+    return current, local_only, has_remote_branch
+
+def set_branch_groups(branches, branch_dict, prefix):
+    current, local_only, has_remote_branch = branch_groups(branch_dict)
+    if current is not None:
+        branches["current"] = current
+    branches[f"{prefix}_local_only"] = local_only
+    branches[f"{prefix}_has_remote_branch"] = has_remote_branch
+
+def set_remotes(branches, remotes):
+    pass
+
+def build_branches():
+    branches = {}
+    set_branch_groups(branches, merged, "merged")
+    set_branch_groups(branches, unmerged, "unmerged")
+    set_remotes(branches, [merged["remote"], unmerged["remote"]])
+    return branches
+
+branches = build_branches()
+
+del(merged)
+del(unmerged)</bpmn:script>
     </bpmn:scriptTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
