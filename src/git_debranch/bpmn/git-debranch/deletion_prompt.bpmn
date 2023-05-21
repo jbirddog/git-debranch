@@ -76,17 +76,30 @@ del(branches)</bpmn:script>
     "branches_to_delete": ["branch1", "branch2"]
 }</spiffworkflow:expectedOutputJson>
           </spiffworkflow:unitTest>
+          <spiffworkflow:unitTest id="strips_names">
+            <spiffworkflow:inputJson>{
+  "branch_report": "# some comment\n branch1\n\n\n# not-this-branch\n   branch2   "
+}</spiffworkflow:inputJson>
+            <spiffworkflow:expectedOutputJson>{
+  "branches_to_delete": [
+    "branch1",
+    "branch2"
+  ]
+}</spiffworkflow:expectedOutputJson>
+          </spiffworkflow:unitTest>
         </spiffworkflow:unitTests>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0povx4i</bpmn:incoming>
       <bpmn:outgoing>Flow_1lsziov</bpmn:outgoing>
       <bpmn:script>def branch_line(line):
     line = line.strip()
-    return len(line) &gt; 0 and not line.startswith("#")
+    if len(line) == 0 or line.startswith("#"):
+        return None
+    return line
 
 def user_confirmed_branches():
     lines = branch_report.split("\n")
-    return list(filter(branch_line, lines))
+    return list(filter(None, map(branch_line, lines)))
 
 branches_to_delete = user_confirmed_branches()
 
