@@ -2,8 +2,6 @@
 
 ## v0.1.1
 
-1. fix spaces before/after branch name issue
-1. move def main out of __init__.py, into some package that matches setup.py key?
 1. bump version
 1. when PyPI comes back online for new projects releast v0.1.1
 
