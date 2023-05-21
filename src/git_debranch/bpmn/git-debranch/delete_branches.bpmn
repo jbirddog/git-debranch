@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:spiffworkflow="http://spiffworkflow.org/bpmn/schema/1.0/core" id="Definitions_96f6665" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.0.0-dev">
+  <bpmn:process id="delete_branches" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_0ecta24</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_0ecta24" sourceRef="StartEvent_1" targetRef="Gateway_1ltog1i" />
+    <bpmn:endEvent id="Event_1bsl2ov">
+      <bpmn:incoming>Flow_0v4mach</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:exclusiveGateway id="Gateway_1ltog1i" default="Flow_1lxcorc">
+      <bpmn:incoming>Flow_0ecta24</bpmn:incoming>
+      <bpmn:outgoing>Flow_1lxcorc</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1cn71yy</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1lxcorc" sourceRef="Gateway_1ltog1i" targetRef="Activity_1yt24dj" />
+    <bpmn:sequenceFlow id="Flow_1cn71yy" sourceRef="Gateway_1ltog1i" targetRef="Gateway_0w96sv3">
+      <bpmn:conditionExpression>len(branches_to_delete) == 0</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:exclusiveGateway id="Gateway_0w96sv3">
+      <bpmn:incoming>Flow_1cn71yy</bpmn:incoming>
+      <bpmn:incoming>Flow_1iyvi2c</bpmn:incoming>
+      <bpmn:outgoing>Flow_0v4mach</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0v4mach" sourceRef="Gateway_0w96sv3" targetRef="Event_1bsl2ov" />
+    <bpmn:sequenceFlow id="Flow_1iyvi2c" sourceRef="Activity_1yt24dj" targetRef="Gateway_0w96sv3" />
+    <bpmn:serviceTask id="Activity_1yt24dj" name="Delete selected branches">
+      <bpmn:extensionElements>
+        <spiffworkflow:serviceTaskOperator id="git/DeleteBranches" resultVariable="result" />
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1lxcorc</bpmn:incoming>
+      <bpmn:outgoing>Flow_1iyvi2c</bpmn:outgoing>
+    </bpmn:serviceTask>
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="delete_branches">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1bsl2ov_di" bpmnElement="Event_1bsl2ov">
+        <dc:Bounds x="612" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1ltog1i_di" bpmnElement="Gateway_1ltog1i" isMarkerVisible="true">
+        <dc:Bounds x="245" y="152" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0w96sv3_di" bpmnElement="Gateway_0w96sv3" isMarkerVisible="true">
+        <dc:Bounds x="535" y="152" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_080uqjc_di" bpmnElement="Activity_1yt24dj">
+        <dc:Bounds x="360" y="200" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0ecta24_di" bpmnElement="Flow_0ecta24">
+        <di:waypoint x="215" y="177" />
+        <di:waypoint x="245" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1lxcorc_di" bpmnElement="Flow_1lxcorc">
+        <di:waypoint x="270" y="202" />
+        <di:waypoint x="270" y="240" />
+        <di:waypoint x="360" y="240" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1cn71yy_di" bpmnElement="Flow_1cn71yy">
+        <di:waypoint x="295" y="177" />
+        <di:waypoint x="535" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0v4mach_di" bpmnElement="Flow_0v4mach">
+        <di:waypoint x="585" y="177" />
+        <di:waypoint x="612" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1iyvi2c_di" bpmnElement="Flow_1iyvi2c">
+        <di:waypoint x="460" y="240" />
+        <di:waypoint x="560" y="240" />
+        <di:waypoint x="560" y="202" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

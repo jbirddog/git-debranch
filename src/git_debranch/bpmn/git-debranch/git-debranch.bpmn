@@ -5,7 +5,7 @@
       <bpmn:outgoing>Flow_13piout</bpmn:outgoing>
     </bpmn:startEvent>
     <bpmn:endEvent id="Event_1wlwe0w">
-      <bpmn:incoming>Flow_1ikchnf</bpmn:incoming>
+      <bpmn:incoming>Flow_1uy858t</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:exclusiveGateway id="Gateway_1p0jed3" default="Flow_11swttm">
       <bpmn:incoming>Flow_1b4tqmf</bpmn:incoming>
@@ -30,10 +30,15 @@
       <bpmn:incoming>Flow_11swttm</bpmn:incoming>
       <bpmn:outgoing>Flow_1026mcr</bpmn:outgoing>
     </bpmn:callActivity>
-    <bpmn:sequenceFlow id="Flow_1ikchnf" sourceRef="Activity_10dkgjv" targetRef="Event_1wlwe0w" />
+    <bpmn:sequenceFlow id="Flow_1ikchnf" sourceRef="Activity_10dkgjv" targetRef="Activity_1h49w3b" />
     <bpmn:callActivity id="Activity_10dkgjv" name="Prompt for branches to delete" calledElement="deletion_prompt">
       <bpmn:incoming>Flow_1026mcr</bpmn:incoming>
       <bpmn:outgoing>Flow_1ikchnf</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:sequenceFlow id="Flow_1uy858t" sourceRef="Activity_1h49w3b" targetRef="Event_1wlwe0w" />
+    <bpmn:callActivity id="Activity_1h49w3b" name="Delete branches" calledElement="delete_branches">
+      <bpmn:incoming>Flow_1ikchnf</bpmn:incoming>
+      <bpmn:outgoing>Flow_1uy858t</bpmn:outgoing>
     </bpmn:callActivity>
     <bpmn:textAnnotation id="TextAnnotation_1b3js8g">
       <bpmn:text>git operation was not successful, best to bail now</bpmn:text>
@@ -48,9 +53,6 @@
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="git-debranch">
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="382" y="162" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1wlwe0w_di" bpmnElement="Event_1wlwe0w">
-        <dc:Bounds x="1062" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="BPMNShape_0z9jlas" bpmnElement="Gateway_1p0jed3" isMarkerVisible="true">
         <dc:Bounds x="625" y="152" width="50" height="50" />
@@ -78,6 +80,13 @@
         <dc:Bounds x="480" y="-30" width="100" height="127" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1wlwe0w_di" bpmnElement="Event_1wlwe0w">
+        <dc:Bounds x="1152" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0tq5gom_di" bpmnElement="Activity_1h49w3b">
+        <dc:Bounds x="1020" y="137" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="BPMNEdge_0xjlr6e" bpmnElement="Flow_1rwpp5i">
         <di:waypoint x="650" y="152" />
         <di:waypoint x="650" y="68" />
@@ -100,7 +109,7 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ikchnf_di" bpmnElement="Flow_1ikchnf">
         <di:waypoint x="980" y="177" />
-        <di:waypoint x="1062" y="177" />
+        <di:waypoint x="1020" y="177" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="BPMNEdge_03yfwrz" bpmnElement="Association_0h4hzko">
         <di:waypoint x="650" y="110" />
@@ -109,6 +118,10 @@
       <bpmndi:BPMNEdge id="Association_1ykz79g_di" bpmnElement="Association_1ykz79g">
         <di:waypoint x="650" y="110" />
         <di:waypoint x="580" y="37" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1uy858t_di" bpmnElement="Flow_1uy858t">
+        <di:waypoint x="1120" y="177" />
+        <di:waypoint x="1152" y="177" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

@@ -29,6 +29,7 @@ def _bpmn_data_paths():
         "all_branches.bpmn",
         "branch_parser.bpmn",
         "deletion_prompt.bpmn",
+        "delete_branches.bpmn",
     ]
     return map(_bpmn_data_path, bpmn_filenames)
 
