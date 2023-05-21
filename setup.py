@@ -30,7 +30,7 @@ setup(
     },
 
     entry_points = {
-        "console_scripts": ["git-debranch=git_debranch:main"],
+        "console_scripts": ["git-debranch=git_debranch.console_scripts:main"],
     },
     py_modules = ["git-debranch"],
 )
