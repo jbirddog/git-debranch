@@ -45,12 +45,13 @@ def build_branch_report():
     ])
 
     add_section(lines, branches["unmerged_local_only"], True, [
-        "## The following branches only exist locally but have not been merged:",
+        "## The following branches only exist locally but not may not have ", 
+        "## been merged:",
     ])
 
     add_section(lines, branches["unmerged_has_remote_branch"], True, [
         "## The following branches exist locally as well as on a remote and ",
-        "## have not been merged:",
+        "## may not have been merged:",
     ])
 
     return "\n".join(lines)

@@ -14,9 +14,6 @@
    1. --fetch-and-prune
 1. unit test with mock git service task
    1. wait to integration upcoming testing framework
-1. README.md
-   1. installing
-   1. development, using arena to edit
 1. CI
    1. run tests (when ready, see above)
    1. push to pypi
