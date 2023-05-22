@@ -8,8 +8,8 @@ Git subcommand that uses [SpiffWorkflow](https://github.com/sartography/SpiffWor
 pip install git-debranch
 ```
 
-_Note: PyPI is currently blocking new uploads. Once resolved this will work. For now you need to 
-clone the repo and do a local install: pip install -r requirements.txt_
+_Note: This is currently blocked on an upcoming release of SpiffWorkflow. Once resolved this will work.
+For now you need to clone the repo and do a local install: pip install -r requirements.txt_
 
 ## Usage
 

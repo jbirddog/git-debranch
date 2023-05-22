@@ -15,7 +15,8 @@ setup(
     author = "Jon Herron",
     author_email = "jon.herron@yahoo.com",
 
-    install_requires = contents_of("requirements.txt"),
+    # uncomment after SpiffWorkflow 2.0 release
+    #install_requires = contents_of("requirements.txt"),
     python_requires = ">=3.9",
 
     package_dir = {"": "src"},
