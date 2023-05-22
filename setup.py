@@ -15,8 +15,7 @@ setup(
     author = "Jon Herron",
     author_email = "jon.herron@yahoo.com",
 
-    # uncomment after spiffworkflow 2.0 instead of hash tar
-    #install_requires = contents_of("requirements.txt"),
+    install_requires = contents_of("requirements.txt"),
     python_requires = ">=3.9",
 
     package_dir = {"": "src"},
