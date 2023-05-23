@@ -1,9 +1,13 @@
 # TODOs
 
-## v0.1.1
+## v0.1.4
 
+1. add spawn.bpmn to spawn a subprocess
+   1. terminate on failure
+   1. git commands become bpmn files that call spawn
 1. bump version
-1. when PyPI comes back online for new projects releast v0.1.1
+1. blocked on SpiffWorkflow 2.0?
+   1. or vendor in the short term?
 
 ## unordered
 

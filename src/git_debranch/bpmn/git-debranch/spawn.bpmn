@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:spiffworkflow="http://spiffworkflow.org/bpmn/schema/1.0/core" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_96f6665" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.0.0-dev">
+  <bpmn:process id="Process_kpcnh5h" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1">
+      <bpmn:outgoing>Flow_090xnqj</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:sequenceFlow id="Flow_090xnqj" sourceRef="StartEvent_1" targetRef="Activity_1wobbp0" />
+    <bpmn:exclusiveGateway id="Gateway_0o5auw6" default="Flow_1gimdqy">
+      <bpmn:incoming>Flow_1cl2vgj</bpmn:incoming>
+      <bpmn:outgoing>Flow_1gimdqy</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1msh4mr</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1cl2vgj" sourceRef="Activity_1wobbp0" targetRef="Gateway_0o5auw6" />
+    <bpmn:endEvent id="Event_1vc03l8">
+      <bpmn:incoming>Flow_1gimdqy</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:sequenceFlow id="Flow_1gimdqy" sourceRef="Gateway_0o5auw6" targetRef="Event_1vc03l8" />
+    <bpmn:sequenceFlow id="Flow_1msh4mr" sourceRef="Gateway_0o5auw6" targetRef="Event_08pdzal">
+      <bpmn:conditionExpression>spawn_result["resultcode"] != 0</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:endEvent id="Event_08pdzal">
+      <bpmn:incoming>Flow_1msh4mr</bpmn:incoming>
+      <bpmn:terminateEventDefinition id="TerminateEventDefinition_16l45dq" />
+    </bpmn:endEvent>
+    <bpmn:serviceTask id="Activity_1wobbp0" name="Spawn a process">
+      <bpmn:extensionElements>
+        <spiffworkflow:serviceTaskOperator id="os/SpawnProcess" resultVariable="spawn_result">
+          <spiffworkflow:parameters>
+            <spiffworkflow:parameter id="args" type="any" value="spawn_args" />
+          </spiffworkflow:parameters>
+        </spiffworkflow:serviceTaskOperator>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_090xnqj</bpmn:incoming>
+      <bpmn:outgoing>Flow_1cl2vgj</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:textAnnotation id="TextAnnotation_0kuplex">
+      <bpmn:text>This behaves like spawn+unwrap. Maybe rename if reusing or make spawn_unwrap.bpmn</bpmn:text>
+    </bpmn:textAnnotation>
+    <bpmn:association id="Association_06bmaew" sourceRef="Gateway_0o5auw6" targetRef="TextAnnotation_0kuplex" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_kpcnh5h">
+      <bpmndi:BPMNShape id="TextAnnotation_0kuplex_di" bpmnElement="TextAnnotation_0kuplex">
+        <dc:Bounds x="480" y="-20" width="100" height="127" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0o5auw6_di" bpmnElement="Gateway_0o5auw6" isMarkerVisible="true">
+        <dc:Bounds x="425" y="152" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1vc03l8_di" bpmnElement="Event_1vc03l8">
+        <dc:Bounds x="532" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1vzcyjv_di" bpmnElement="Event_08pdzal">
+        <dc:Bounds x="532" y="272" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1qk1mwi_di" bpmnElement="Activity_1wobbp0">
+        <dc:Bounds x="270" y="137" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_06bmaew_di" bpmnElement="Association_06bmaew">
+        <di:waypoint x="458" y="160" />
+        <di:waypoint x="480" y="107" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_090xnqj_di" bpmnElement="Flow_090xnqj">
+        <di:waypoint x="215" y="177" />
+        <di:waypoint x="270" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1cl2vgj_di" bpmnElement="Flow_1cl2vgj">
+        <di:waypoint x="370" y="177" />
+        <di:waypoint x="425" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1gimdqy_di" bpmnElement="Flow_1gimdqy">
+        <di:waypoint x="475" y="177" />
+        <di:waypoint x="532" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1msh4mr_di" bpmnElement="Flow_1msh4mr">
+        <di:waypoint x="450" y="202" />
+        <di:waypoint x="450" y="290" />
+        <di:waypoint x="532" y="290" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>

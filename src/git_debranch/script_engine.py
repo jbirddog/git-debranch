@@ -10,6 +10,7 @@ class CustomScriptEngine(PythonScriptEngine):
             "git/FetchAndPrune": git_fetch_and_prune,
             "git/ListAllMergedBranches": git_list_all_merged_branches,
             "git/ListAllUnmergedBranches": git_list_all_unmerged_branches,
+            "os/SpawnProcess", spawn_process,
         }
         return operations[operation_name](operation_params, task_data)
 
@@ -35,9 +36,18 @@ def git_list_all_unmerged_branches(params, task_data):
     params = {"args": {"value": run_args, "type": "any"}}
     return subprocess_run(params, task_data)
 
-# TODO: once git/DeleteBranches is in, make this return a func
-# not sure how task_data plays in yet
 def subprocess_run(params, task_data):
+    args = params["args"]["value"]
+    subprocess_result = subprocess.run(args, capture_output=True)
+    result = {
+        "returncode": subprocess_result.returncode,
+        "stdout": subprocess_result.stdout.decode("utf-8"),
+        "stderr": subprocess_result.stderr.decode("utf-8"),
+    }
+    return json.dumps(result)
+
+# TODO: this will be used and above become BPMN call activities
+def spawn_process(params, task_data):
     args = params["args"]["value"]
     subprocess_result = subprocess.run(args, capture_output=True)
     result = {
