@@ -26,7 +26,11 @@
     <bpmn:sequenceFlow id="Flow_1iyvi2c" sourceRef="Activity_1yt24dj" targetRef="Gateway_0w96sv3" />
     <bpmn:serviceTask id="Activity_1yt24dj" name="Delete selected branches">
       <bpmn:extensionElements>
-        <spiffworkflow:serviceTaskOperator id="git/DeleteBranches" resultVariable="result" />
+        <spiffworkflow:serviceTaskOperator id="os/SpawnProcess" resultVariable="result">
+          <spiffworkflow:parameters>
+            <spiffworkflow:parameter id="args" type="any" value="[&#34;git&#34;, &#34;branch&#34;, &#34;-D&#34;] + branches_to_delete" />
+          </spiffworkflow:parameters>
+        </spiffworkflow:serviceTaskOperator>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1lxcorc</bpmn:incoming>
       <bpmn:outgoing>Flow_1iyvi2c</bpmn:outgoing>

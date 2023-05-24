@@ -1,1 +1,1 @@
-SpiffWorkflow @ git+https://github.com/sartography/SpiffWorkflow.git@07c153f2dbf95fbed55a9d3bcfbfcf4f521dfae8
+https://github.com/sartography/SpiffWorkflow/archive/07c153f2dbf95fbed55a9d3bcfbfcf4f521dfae8.tar.gz
