@@ -218,7 +218,11 @@ del(unmerged_branches_result)</bpmn:script>
     <bpmn:sequenceFlow id="Flow_1gttvuv" sourceRef="Activity_0lb6dii" targetRef="Gateway_0baiicz" />
     <bpmn:serviceTask id="Activity_0lb6dii" name="Fetch and prune branches">
       <bpmn:extensionElements>
-        <spiffworkflow:serviceTaskOperator id="git/FetchAndPrune" resultVariable="result" />
+        <spiffworkflow:serviceTaskOperator id="os/SpawnProcess" resultVariable="result">
+          <spiffworkflow:parameters>
+            <spiffworkflow:parameter id="args" type="any" value="[&#34;git&#34;, &#34;fetch&#34;, &#34;-p&#34;]" />
+          </spiffworkflow:parameters>
+        </spiffworkflow:serviceTaskOperator>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0hezl4t</bpmn:incoming>
       <bpmn:outgoing>Flow_1gttvuv</bpmn:outgoing>

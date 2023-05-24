@@ -7,10 +7,9 @@ class CustomScriptEngine(PythonScriptEngine):
     def call_service(self, operation_name, operation_params, task_data):
         operations = {
             "git/DeleteBranches": git_delete_branches,
-            "git/FetchAndPrune": git_fetch_and_prune,
             "git/ListAllMergedBranches": git_list_all_merged_branches,
             "git/ListAllUnmergedBranches": git_list_all_unmerged_branches,
-            "os/SpawnProcess", spawn_process,
+            "os/SpawnProcess": spawn_process,
         }
         return operations[operation_name](operation_params, task_data)
 
@@ -18,11 +17,6 @@ def git_delete_branches(params, task_data):
     run_args = ["git", "branch", "-D"]
     branches_to_delete = task_data["branches_to_delete"]
     run_args += branches_to_delete
-    params = {"args": {"value": run_args, "type": "any"}}
-    return subprocess_run(params, task_data)
-    
-def git_fetch_and_prune(params, task_data):
-    run_args = ["git", "fetch", "-p"]
     params = {"args": {"value": run_args, "type": "any"}}
     return subprocess_run(params, task_data)
 
