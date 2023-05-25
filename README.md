@@ -48,17 +48,13 @@ and see changes. If you add a new bpmn/json file then you need to re-run this co
 ### Using SpiffArena for BPMN edits
 
 [SpiffArena](https://github.com/sartography/spiff-arena) is used to make edits to the BPMN files that are 
-bundled with this program. Currently it is assumed that you have a working copy, possibly from the 
-[Getting Started Guide](https://www.spiffworkflow.org/posts/articles/get_started/). When using SpiffArena as 
-the editor you need to set the following environment variable:
-
-```
-SPIFFWORKFLOW_BACKEND_BPMN_SPEC_ABSOLUTE_DIR
-```
-
-to point to `src/git_debranch` inside this repository. If using docker, the volume that is used for the 
-process models will need to be updated to point to this location.
+bundled with this program. To start the editor run `make run-editor`. You will be presented with a message
+once started to go to `http://localhost:8001` (assuming the default configuration is used). The editor
+requires `docker` and `docker compose` to run.
 
 From there you can edit the diagrams but you cannot run them from within SpiffArena at this time. Some work 
 would need to be done to support our custom `Connector Proxy` that is not http based. You can however run 
 the `Script Task` unit tests, which were very helpful during development.
+
+When finished you can `make stop-editor`. If you would like to pull the latest version of SpiffArena use
+`make update-editor`.
