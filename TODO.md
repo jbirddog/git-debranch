@@ -8,7 +8,6 @@
 
 ## unordered
 
-1. look at having something like an embedded el-rodeo so you can `make edits`
 1. don't fetch and prune by default?
 1. command line args
    1. --dry-run
