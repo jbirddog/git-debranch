@@ -75,23 +75,13 @@ current = current_branch_result["stdout"]
 del(merged_branches_result)
 del(unmerged_branches_result)
 del(remote_branches_result)
-del(current_branch_result)</bpmn:script>
+del(current_branch_result)
+del(spawn_args)</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="Flow_04ggq0k" sourceRef="Activity_1rwssw3" targetRef="Event_1y1qa7g" />
     <bpmn:endEvent id="Event_1y1qa7g">
       <bpmn:incoming>Flow_04ggq0k</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:serviceTask id="Activity_0lb6dii" name="Fetch and prune branches">
-      <bpmn:extensionElements>
-        <spiffworkflow:serviceTaskOperator id="os/SpawnProcess" resultVariable="result">
-          <spiffworkflow:parameters>
-            <spiffworkflow:parameter id="args" type="any" value="[&#34;git&#34;, &#34;fetch&#34;, &#34;-p&#34;]" />
-          </spiffworkflow:parameters>
-        </spiffworkflow:serviceTaskOperator>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0hezl4t</bpmn:incoming>
-      <bpmn:outgoing>Flow_1ogqfb8</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_1ogqfb8" sourceRef="Activity_0lb6dii" targetRef="Gateway_07vk4jr" />
     <bpmn:sequenceFlow id="Flow_0plnctp" sourceRef="Gateway_0gmspex" targetRef="Activity_1rwssw3" />
     <bpmn:callActivity id="Activity_09d782o" name="Get merged branches" calledElement="spawn_process">
@@ -133,6 +123,18 @@ del(current_branch_result)</bpmn:script>
     </bpmn:callActivity>
     <bpmn:sequenceFlow id="Flow_02avd0d" sourceRef="Gateway_07vk4jr" targetRef="Activity_0wtw0rj" />
     <bpmn:sequenceFlow id="Flow_0ua7und" sourceRef="Activity_0wtw0rj" targetRef="Gateway_0gmspex" />
+    <bpmn:callActivity id="Activity_0lb6dii" name="Fetch and prune branches" calledElement="spawn_process">
+      <bpmn:extensionElements>
+        <spiffworkflow:serviceTaskOperator id="os/SpawnProcess" resultVariable="result">
+          <spiffworkflow:parameters>
+            <spiffworkflow:parameter id="args" type="any" value="[&#34;git&#34;, &#34;fetch&#34;, &#34;-p&#34;]" />
+          </spiffworkflow:parameters>
+        </spiffworkflow:serviceTaskOperator>
+        <spiffworkflow:preScript>spawn_args = ["git", "fetch", "-p"]</spiffworkflow:preScript>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0hezl4t</bpmn:incoming>
+      <bpmn:outgoing>Flow_1ogqfb8</bpmn:outgoing>
+    </bpmn:callActivity>
     <bpmn:textAnnotation id="TextAnnotation_1b81gty">
       <bpmn:text>Would like to look at making this a multi-instance once things are merged.</bpmn:text>
     </bpmn:textAnnotation>
@@ -160,10 +162,6 @@ del(current_branch_result)</bpmn:script>
       <bpmndi:BPMNShape id="Event_1y1qa7g_di" bpmnElement="Event_1y1qa7g">
         <dc:Bounds x="752" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0lbqcba_di" bpmnElement="Activity_0lb6dii">
-        <dc:Bounds x="120" y="137" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1lc0i0u_di" bpmnElement="Activity_09d782o">
         <dc:Bounds x="370" y="-20" width="100" height="80" />
         <bpmndi:BPMNLabel />
@@ -187,6 +185,9 @@ del(current_branch_result)</bpmn:script>
       <bpmndi:BPMNShape id="BPMNShape_10pp7pw" bpmnElement="Activity_0wtw0rj">
         <dc:Bounds x="370" y="290" width="100" height="80" />
         <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0gv5hia_di" bpmnElement="Activity_0lb6dii">
+        <dc:Bounds x="120" y="137" width="100" height="80" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0hezl4t_di" bpmnElement="Flow_0hezl4t">
         <di:waypoint x="68" y="177" />
