@@ -8,22 +8,19 @@
     <bpmn:parallelGateway id="Gateway_07vk4jr">
       <bpmn:incoming>Flow_1ogqfb8</bpmn:incoming>
       <bpmn:outgoing>Flow_0889ozu</bpmn:outgoing>
-      <bpmn:outgoing>Flow_083ij9n</bpmn:outgoing>
-      <bpmn:outgoing>Flow_0v4cwgi</bpmn:outgoing>
-      <bpmn:outgoing>Flow_0wlspes</bpmn:outgoing>
+      <bpmn:outgoing>Flow_05auvqd</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1nxzhsg</bpmn:outgoing>
+      <bpmn:outgoing>Flow_02avd0d</bpmn:outgoing>
     </bpmn:parallelGateway>
-    <bpmn:sequenceFlow id="Flow_0889ozu" sourceRef="Gateway_07vk4jr" targetRef="Activity_09co3ki" />
-    <bpmn:sequenceFlow id="Flow_083ij9n" sourceRef="Gateway_07vk4jr" targetRef="Activity_18f4cgn" />
-    <bpmn:sequenceFlow id="Flow_0auw9z4" sourceRef="Activity_18f4cgn" targetRef="Gateway_0gmspex" />
+    <bpmn:sequenceFlow id="Flow_0889ozu" sourceRef="Gateway_07vk4jr" targetRef="Activity_09d782o" />
     <bpmn:parallelGateway id="Gateway_0gmspex">
-      <bpmn:incoming>Flow_0auw9z4</bpmn:incoming>
-      <bpmn:incoming>Flow_0rz5563</bpmn:incoming>
-      <bpmn:incoming>Flow_1jbk2gb</bpmn:incoming>
-      <bpmn:incoming>Flow_1p72syn</bpmn:incoming>
+      <bpmn:incoming>Flow_02q163a</bpmn:incoming>
+      <bpmn:incoming>Flow_1msiwsx</bpmn:incoming>
+      <bpmn:incoming>Flow_1p2ht7u</bpmn:incoming>
+      <bpmn:incoming>Flow_0ua7und</bpmn:incoming>
       <bpmn:outgoing>Flow_0plnctp</bpmn:outgoing>
     </bpmn:parallelGateway>
-    <bpmn:sequenceFlow id="Flow_0rz5563" sourceRef="Activity_09co3ki" targetRef="Gateway_0gmspex" />
-    <bpmn:scriptTask id="Activity_1rwssw3" name="Merge results">
+    <bpmn:scriptTask id="Activity_1rwssw3" name="Extract results">
       <bpmn:extensionElements>
         <spiffworkflow:unitTests>
           <spiffworkflow:unitTest id="happiest_of_paths">
@@ -80,28 +77,6 @@ del(unmerged_branches_result)
 del(remote_branches_result)
 del(current_branch_result)</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:serviceTask id="Activity_09co3ki" name="Get merged branches">
-      <bpmn:extensionElements>
-        <spiffworkflow:serviceTaskOperator id="os/SpawnProcess" resultVariable="merged_branches_result">
-          <spiffworkflow:parameters>
-            <spiffworkflow:parameter id="args" type="any" value="[&#34;git&#34;, &#34;branch&#34;, &#34;--merged&#34;]" />
-          </spiffworkflow:parameters>
-        </spiffworkflow:serviceTaskOperator>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0889ozu</bpmn:incoming>
-      <bpmn:outgoing>Flow_0rz5563</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_18f4cgn" name="Get unmerged branches">
-      <bpmn:extensionElements>
-        <spiffworkflow:serviceTaskOperator id="os/SpawnProcess" resultVariable="unmerged_branches_result">
-          <spiffworkflow:parameters>
-            <spiffworkflow:parameter id="args" type="any" value="[&#34;git&#34;, &#34;branch&#34;, &#34;--no-merged&#34;]" />
-          </spiffworkflow:parameters>
-        </spiffworkflow:serviceTaskOperator>
-      </bpmn:extensionElements>
-      <bpmn:incoming>Flow_083ij9n</bpmn:incoming>
-      <bpmn:outgoing>Flow_0auw9z4</bpmn:outgoing>
-    </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_04ggq0k" sourceRef="Activity_1rwssw3" targetRef="Event_1y1qa7g" />
     <bpmn:endEvent id="Event_1y1qa7g">
       <bpmn:incoming>Flow_04ggq0k</bpmn:incoming>
@@ -119,32 +94,45 @@ del(current_branch_result)</bpmn:script>
     </bpmn:serviceTask>
     <bpmn:sequenceFlow id="Flow_1ogqfb8" sourceRef="Activity_0lb6dii" targetRef="Gateway_07vk4jr" />
     <bpmn:sequenceFlow id="Flow_0plnctp" sourceRef="Gateway_0gmspex" targetRef="Activity_1rwssw3" />
-    <bpmn:sequenceFlow id="Flow_0v4cwgi" sourceRef="Gateway_07vk4jr" targetRef="Activity_1qpwkew" />
-    <bpmn:sequenceFlow id="Flow_1jbk2gb" sourceRef="Activity_1qpwkew" targetRef="Gateway_0gmspex" />
-    <bpmn:sequenceFlow id="Flow_0wlspes" sourceRef="Gateway_07vk4jr" targetRef="Activity_0ldq8qv" />
-    <bpmn:sequenceFlow id="Flow_1p72syn" sourceRef="Activity_0ldq8qv" targetRef="Gateway_0gmspex" />
-    <bpmn:serviceTask id="Activity_1qpwkew" name="Get remote branches">
+    <bpmn:callActivity id="Activity_09d782o" name="Get merged branches" calledElement="spawn_process">
       <bpmn:extensionElements>
-        <spiffworkflow:serviceTaskOperator id="os/SpawnProcess" resultVariable="remote_branches_result">
-          <spiffworkflow:parameters>
-            <spiffworkflow:parameter id="args" type="any" value="[&#34;git&#34;, &#34;branch&#34;, &#34;--remotes&#34;]" />
-          </spiffworkflow:parameters>
-        </spiffworkflow:serviceTaskOperator>
+        <spiffworkflow:preScript>spawn_args = ["git", "branch", "--merged"]</spiffworkflow:preScript>
+        <spiffworkflow:postScript>merged_branches_result = result</spiffworkflow:postScript>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0v4cwgi</bpmn:incoming>
-      <bpmn:outgoing>Flow_1jbk2gb</bpmn:outgoing>
-    </bpmn:serviceTask>
-    <bpmn:serviceTask id="Activity_0ldq8qv" name="Get current branch">
+      <bpmn:incoming>Flow_0889ozu</bpmn:incoming>
+      <bpmn:outgoing>Flow_02q163a</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:sequenceFlow id="Flow_02q163a" sourceRef="Activity_09d782o" targetRef="Gateway_0gmspex" />
+    <bpmn:callActivity id="Activity_1qlm0jm" name="Get unmerged branches" calledElement="spawn_process">
       <bpmn:extensionElements>
-        <spiffworkflow:serviceTaskOperator id="os/SpawnProcess" resultVariable="current_branch_result">
-          <spiffworkflow:parameters>
-            <spiffworkflow:parameter id="args" type="any" value="[&#34;git&#34;, &#34;branch&#34;, &#34;--show-current&#34;]" />
-          </spiffworkflow:parameters>
-        </spiffworkflow:serviceTaskOperator>
+        <spiffworkflow:preScript>spawn_args = ["git", "branch", "--no-merged"]</spiffworkflow:preScript>
+        <spiffworkflow:postScript>unmerged_branches_result = result</spiffworkflow:postScript>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0wlspes</bpmn:incoming>
-      <bpmn:outgoing>Flow_1p72syn</bpmn:outgoing>
-    </bpmn:serviceTask>
+      <bpmn:incoming>Flow_05auvqd</bpmn:incoming>
+      <bpmn:outgoing>Flow_1msiwsx</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:sequenceFlow id="Flow_05auvqd" sourceRef="Gateway_07vk4jr" targetRef="Activity_1qlm0jm" />
+    <bpmn:sequenceFlow id="Flow_1msiwsx" sourceRef="Activity_1qlm0jm" targetRef="Gateway_0gmspex" />
+    <bpmn:callActivity id="Activity_1ntduty" name="Get remote branches" calledElement="spawn_process">
+      <bpmn:extensionElements>
+        <spiffworkflow:preScript>spawn_args = ["git", "branch", "--remotes"]</spiffworkflow:preScript>
+        <spiffworkflow:postScript>remote_branches_result = result</spiffworkflow:postScript>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_1nxzhsg</bpmn:incoming>
+      <bpmn:outgoing>Flow_1p2ht7u</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:sequenceFlow id="Flow_1nxzhsg" sourceRef="Gateway_07vk4jr" targetRef="Activity_1ntduty" />
+    <bpmn:sequenceFlow id="Flow_1p2ht7u" sourceRef="Activity_1ntduty" targetRef="Gateway_0gmspex" />
+    <bpmn:callActivity id="Activity_0wtw0rj" name="Get current branch" calledElement="spawn_process">
+      <bpmn:extensionElements>
+        <spiffworkflow:preScript>spawn_args = ["git", "branch", "--show-current"]</spiffworkflow:preScript>
+        <spiffworkflow:postScript>current_branch_result = result</spiffworkflow:postScript>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_02avd0d</bpmn:incoming>
+      <bpmn:outgoing>Flow_0ua7und</bpmn:outgoing>
+    </bpmn:callActivity>
+    <bpmn:sequenceFlow id="Flow_02avd0d" sourceRef="Gateway_07vk4jr" targetRef="Activity_0wtw0rj" />
+    <bpmn:sequenceFlow id="Flow_0ua7und" sourceRef="Activity_0wtw0rj" targetRef="Gateway_0gmspex" />
     <bpmn:textAnnotation id="TextAnnotation_1b81gty">
       <bpmn:text>Would like to look at making this a multi-instance once things are merged.</bpmn:text>
     </bpmn:textAnnotation>
@@ -166,30 +154,18 @@ del(current_branch_result)</bpmn:script>
         <dc:Bounds x="525" y="152" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_097d5gt_di" bpmnElement="Activity_1rwssw3">
-        <dc:Bounds x="620" y="137" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0cbkwti_di" bpmnElement="Activity_09co3ki">
-        <dc:Bounds x="370" y="-20" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0segx3a_di" bpmnElement="Activity_18f4cgn">
-        <dc:Bounds x="370" y="80" width="100" height="80" />
+        <dc:Bounds x="610" y="137" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1y1qa7g_di" bpmnElement="Event_1y1qa7g">
-        <dc:Bounds x="762" y="159" width="36" height="36" />
+        <dc:Bounds x="752" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0lbqcba_di" bpmnElement="Activity_0lb6dii">
         <dc:Bounds x="120" y="137" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0iugego_di" bpmnElement="Activity_1qpwkew">
-        <dc:Bounds x="370" y="190" width="100" height="80" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0vy3isd_di" bpmnElement="Activity_0ldq8qv">
-        <dc:Bounds x="370" y="290" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_1lc0i0u_di" bpmnElement="Activity_09d782o">
+        <dc:Bounds x="370" y="-20" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1b81gty_di" bpmnElement="TextAnnotation_1b81gty">
@@ -198,6 +174,18 @@ del(current_branch_result)</bpmn:script>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="TextAnnotation_1wtp9ek_di" bpmnElement="TextAnnotation_1wtp9ek">
         <dc:Bounds x="-30" y="-63" width="100" height="127" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0apvxkl" bpmnElement="Activity_1qlm0jm">
+        <dc:Bounds x="370" y="80" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0w43oon" bpmnElement="Activity_1ntduty">
+        <dc:Bounds x="370" y="190" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_10pp7pw" bpmnElement="Activity_0wtw0rj">
+        <dc:Bounds x="370" y="290" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0hezl4t_di" bpmnElement="Flow_0hezl4t">
@@ -209,24 +197,9 @@ del(current_branch_result)</bpmn:script>
         <di:waypoint x="290" y="20" />
         <di:waypoint x="370" y="20" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_083ij9n_di" bpmnElement="Flow_083ij9n">
-        <di:waypoint x="290" y="152" />
-        <di:waypoint x="290" y="120" />
-        <di:waypoint x="370" y="120" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0auw9z4_di" bpmnElement="Flow_0auw9z4">
-        <di:waypoint x="470" y="120" />
-        <di:waypoint x="550" y="120" />
-        <di:waypoint x="550" y="152" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0rz5563_di" bpmnElement="Flow_0rz5563">
-        <di:waypoint x="470" y="20" />
-        <di:waypoint x="550" y="20" />
-        <di:waypoint x="550" y="152" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_04ggq0k_di" bpmnElement="Flow_04ggq0k">
-        <di:waypoint x="720" y="177" />
-        <di:waypoint x="762" y="177" />
+        <di:waypoint x="710" y="177" />
+        <di:waypoint x="752" y="177" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ogqfb8_di" bpmnElement="Flow_1ogqfb8">
         <di:waypoint x="220" y="177" />
@@ -234,27 +207,12 @@ del(current_branch_result)</bpmn:script>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0plnctp_di" bpmnElement="Flow_0plnctp">
         <di:waypoint x="575" y="177" />
-        <di:waypoint x="620" y="177" />
+        <di:waypoint x="610" y="177" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0v4cwgi_di" bpmnElement="Flow_0v4cwgi">
-        <di:waypoint x="290" y="202" />
-        <di:waypoint x="290" y="230" />
-        <di:waypoint x="370" y="230" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1jbk2gb_di" bpmnElement="Flow_1jbk2gb">
-        <di:waypoint x="470" y="230" />
-        <di:waypoint x="550" y="230" />
-        <di:waypoint x="550" y="202" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0wlspes_di" bpmnElement="Flow_0wlspes">
-        <di:waypoint x="290" y="202" />
-        <di:waypoint x="290" y="330" />
-        <di:waypoint x="370" y="330" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1p72syn_di" bpmnElement="Flow_1p72syn">
-        <di:waypoint x="470" y="330" />
-        <di:waypoint x="550" y="330" />
-        <di:waypoint x="550" y="202" />
+      <bpmndi:BPMNEdge id="Flow_02q163a_di" bpmnElement="Flow_02q163a">
+        <di:waypoint x="470" y="20" />
+        <di:waypoint x="550" y="20" />
+        <di:waypoint x="550" y="152" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Association_06jn47e_di" bpmnElement="Association_06jn47e">
         <di:waypoint x="283" y="159" />
@@ -263,6 +221,36 @@ del(current_branch_result)</bpmn:script>
       <bpmndi:BPMNEdge id="Association_1uty3t0_di" bpmnElement="Association_1uty3t0">
         <di:waypoint x="137" y="137" />
         <di:waypoint x="70" y="52" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05auvqd_di" bpmnElement="Flow_05auvqd">
+        <di:waypoint x="290" y="152" />
+        <di:waypoint x="290" y="120" />
+        <di:waypoint x="370" y="120" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1msiwsx_di" bpmnElement="Flow_1msiwsx">
+        <di:waypoint x="470" y="120" />
+        <di:waypoint x="550" y="120" />
+        <di:waypoint x="550" y="152" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1nxzhsg_di" bpmnElement="Flow_1nxzhsg">
+        <di:waypoint x="290" y="202" />
+        <di:waypoint x="290" y="230" />
+        <di:waypoint x="370" y="230" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1p2ht7u_di" bpmnElement="Flow_1p2ht7u">
+        <di:waypoint x="470" y="230" />
+        <di:waypoint x="550" y="230" />
+        <di:waypoint x="550" y="202" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_02avd0d_di" bpmnElement="Flow_02avd0d">
+        <di:waypoint x="290" y="202" />
+        <di:waypoint x="290" y="330" />
+        <di:waypoint x="370" y="330" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0ua7und_di" bpmnElement="Flow_0ua7und">
+        <di:waypoint x="470" y="330" />
+        <di:waypoint x="550" y="330" />
+        <di:waypoint x="550" y="202" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
