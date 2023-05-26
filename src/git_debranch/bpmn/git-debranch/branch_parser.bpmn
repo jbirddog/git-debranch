@@ -8,7 +8,7 @@
     <bpmn:endEvent id="Event_1ts0rz7">
       <bpmn:incoming>Flow_1icfqqq</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:scriptTask id="Activity_0v238ap" name="Split branch strings">
+    <bpmn:scriptTask id="Activity_0v238ap" name="Parse branch strings">
       <bpmn:extensionElements>
         <spiffworkflow:unitTests>
           <spiffworkflow:unitTest id="happy_path">
@@ -25,7 +25,7 @@
   "result": {
     "returncode": 0
   },
-  "current": "j\n",
+  "current": "j",
   "merged": [
     " a",
     " b",
@@ -54,7 +54,8 @@
 
 merged = to_list(merged)
 unmerged = to_list(unmerged)
-remote = to_list(remote)</bpmn:script>
+remote = to_list(remote)
+current = current.strip()</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="Flow_0edxyrj" sourceRef="Activity_0sdmpoy" targetRef="Activity_1n9ykr2" />
     <bpmn:scriptTask id="Activity_0sdmpoy" name="Group branches">
@@ -254,7 +255,7 @@ del(unmerged)</bpmn:script>
   "result": {
     "returncode": 0
   },
-  "current": "j\n",
+  "current": "a",
   "merged": [
     "* a",
     "  b",
@@ -275,7 +276,7 @@ del(unmerged)</bpmn:script>
   "result": {
     "returncode": 0
   },
-  "current": "j\n",
+  "current": "a",
   "merged": [
     "b",
     "c"
@@ -317,7 +318,7 @@ remote = branches_with_empty_prefix(remote)</bpmn:script>
   "result": {
     "returncode": 0
   },
-  "current": "j\n",
+  "current": "j",
   "merged": [
     "b",
     "c"
@@ -339,7 +340,7 @@ remote = branches_with_empty_prefix(remote)</bpmn:script>
   "result": {
     "returncode": 0
   },
-  "current": "j\n",
+  "current": "j",
   "merged": [
     "b",
     "c"
