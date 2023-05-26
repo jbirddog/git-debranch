@@ -13,7 +13,7 @@
       <bpmn:incoming>Flow_0p7er6v</bpmn:incoming>
       <bpmn:outgoing>Flow_0pqk0gt</bpmn:outgoing>
       <bpmn:script>def local_only(branches):
-    return list(filter(lambda b: b not in head and b not in remote, branches))
+    return sorted(filter(lambda b: b not in head and b not in remote, branches))
 
 def add_section(lines, section_lines, comment, header):
     if len(section_lines) == 0:
@@ -33,7 +33,7 @@ def build_branch_report():
         "##",
         "## Any lines that are non empty and do not start with a # are assumed to ",
         "## be branch names, one per line. Each uncommented branch name will be ",
-        "## marked for deletion.",
+        "## marked for deletion. HEAD branches are not shown.",
         "",
     ]
 
