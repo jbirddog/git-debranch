@@ -6,22 +6,55 @@
     </bpmn:startEvent>
     <bpmn:sequenceFlow id="Flow_0zt50xr" sourceRef="StartEvent_1" targetRef="Activity_0v238ap" />
     <bpmn:endEvent id="Event_1ts0rz7">
-      <bpmn:incoming>Flow_14g5ljd</bpmn:incoming>
+      <bpmn:incoming>Flow_1qhumuz</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_1345wuj" sourceRef="Activity_0v238ap" targetRef="Activity_0sdmpoy" />
     <bpmn:scriptTask id="Activity_0v238ap" name="Split branch strings">
+      <bpmn:extensionElements>
+        <spiffworkflow:unitTests>
+          <spiffworkflow:unitTest id="happy_path">
+            <spiffworkflow:inputJson>{
+  "result": {
+    "returncode": 0
+  },
+  "current": "j\n",
+  "merged": " a\n b\n c\n\n",
+  "remote": " g\n h\n i\n\n",
+  "unmerged": " d\n e\n f\n\n"
+}</spiffworkflow:inputJson>
+            <spiffworkflow:expectedOutputJson>{
+  "result": {
+    "returncode": 0
+  },
+  "current": "j\n",
+  "merged": [
+    " a",
+    " b",
+    " c"
+  ],
+  "remote": [
+    " g",
+    " h",
+    " i"
+  ],
+  "unmerged": [
+    " d",
+    " e",
+    " f"
+  ]
+}</spiffworkflow:expectedOutputJson>
+          </spiffworkflow:unitTest>
+        </spiffworkflow:unitTests>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0zt50xr</bpmn:incoming>
-      <bpmn:outgoing>Flow_1345wuj</bpmn:outgoing>
+      <bpmn:outgoing>Flow_0c9l7wr</bpmn:outgoing>
       <bpmn:script>def to_list(branches):
     parts = branches.split("\n")
     non_empty_parts = filter(len, parts)
     return list(non_empty_parts)
 
-merged = result.pop("merged")
 merged = to_list(merged)
-
-unmerged = result.pop("unmerged")
-unmerged = to_list(unmerged)</bpmn:script>
+unmerged = to_list(unmerged)
+remote = to_list(remote)</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="Flow_0edxyrj" sourceRef="Activity_0sdmpoy" targetRef="Activity_1n9ykr2" />
     <bpmn:scriptTask id="Activity_0sdmpoy" name="Group branches">
@@ -74,7 +107,6 @@ unmerged = to_list(unmerged)</bpmn:script>
           </spiffworkflow:unitTest>
         </spiffworkflow:unitTests>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1345wuj</bpmn:incoming>
       <bpmn:outgoing>Flow_0edxyrj</bpmn:outgoing>
       <bpmn:script>def branch_components(branch):
     branch_name = branch[2:]
@@ -113,7 +145,6 @@ def group_branches(branches):
 merged = group_branches(merged)
 unmerged = group_branches(unmerged)</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:sequenceFlow id="Flow_14g5ljd" sourceRef="Activity_1n9ykr2" targetRef="Event_1ts0rz7" />
     <bpmn:scriptTask id="Activity_1n9ykr2" name="Finalize collections">
       <bpmn:extensionElements>
         <spiffworkflow:unitTests>
@@ -177,7 +208,6 @@ unmerged = group_branches(unmerged)</bpmn:script>
         </spiffworkflow:unitTests>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0edxyrj</bpmn:incoming>
-      <bpmn:outgoing>Flow_14g5ljd</bpmn:outgoing>
       <bpmn:script>def branch_groups(branch_dict):
     local = branch_dict.get("local", [])
     remote = branch_dict.get("remote", {})
@@ -214,6 +244,70 @@ branches = build_branches()
 del(merged)
 del(unmerged)</bpmn:script>
     </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_0c9l7wr" sourceRef="Activity_0v238ap" targetRef="Activity_1k4pxd0" />
+    <bpmn:sequenceFlow id="Flow_1qhumuz" sourceRef="Activity_1k4pxd0" targetRef="Event_1ts0rz7" />
+    <bpmn:scriptTask id="Activity_1k4pxd0" name="Handle branch marker prefix">
+      <bpmn:extensionElements>
+        <spiffworkflow:unitTests>
+          <spiffworkflow:unitTest id="happy_path">
+            <spiffworkflow:inputJson>{
+  "result": {
+    "returncode": 0
+  },
+  "current": "j\n",
+  "merged": [
+    "* a",
+    "  b",
+    "  c"
+  ],
+  "remote": [
+    "  g",
+    "  h",
+    "  i"
+  ],
+  "unmerged": [
+    "  d",
+    "  e",
+    "  f"
+  ]
+}</spiffworkflow:inputJson>
+            <spiffworkflow:expectedOutputJson>{
+  "result": {
+    "returncode": 0
+  },
+  "current": "j\n",
+  "merged": [
+    "b",
+    "c"
+  ],
+  "remote": [
+    "g",
+    "h",
+    "i"
+  ],
+  "unmerged": [
+    "d",
+    "e",
+    "f"
+  ]
+}</spiffworkflow:expectedOutputJson>
+          </spiffworkflow:unitTest>
+        </spiffworkflow:unitTests>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0c9l7wr</bpmn:incoming>
+      <bpmn:outgoing>Flow_1qhumuz</bpmn:outgoing>
+      <bpmn:script>def branch_with_empty_prefix(branch):
+    if len(branch) &lt; 2 or branch[:2] != "  ":
+        return None
+    return branch[2:]
+
+def branches_with_empty_prefix(branches):
+    return list(filter(None, map(branch_with_empty_prefix, branches)))
+
+merged = branches_with_empty_prefix(merged)
+unmerged = branches_with_empty_prefix(unmerged)
+remote = branches_with_empty_prefix(remote)</bpmn:script>
+    </bpmn:scriptTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="branch_parser">
@@ -228,27 +322,31 @@ del(unmerged)</bpmn:script>
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1ui38ib_di" bpmnElement="Activity_0sdmpoy">
-        <dc:Bounds x="400" y="137" width="100" height="80" />
+        <dc:Bounds x="400" y="280" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0ag9jkv_di" bpmnElement="Activity_1n9ykr2">
-        <dc:Bounds x="530" y="137" width="100" height="80" />
+        <dc:Bounds x="530" y="280" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0wzmkrf_di" bpmnElement="Activity_1k4pxd0">
+        <dc:Bounds x="400" y="137" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0zt50xr_di" bpmnElement="Flow_0zt50xr">
         <di:waypoint x="215" y="177" />
         <di:waypoint x="270" y="177" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_1345wuj_di" bpmnElement="Flow_1345wuj">
+      <bpmndi:BPMNEdge id="Flow_0edxyrj_di" bpmnElement="Flow_0edxyrj">
+        <di:waypoint x="500" y="320" />
+        <di:waypoint x="530" y="320" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0c9l7wr_di" bpmnElement="Flow_0c9l7wr">
         <di:waypoint x="370" y="177" />
         <di:waypoint x="400" y="177" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_0edxyrj_di" bpmnElement="Flow_0edxyrj">
+      <bpmndi:BPMNEdge id="Flow_1qhumuz_di" bpmnElement="Flow_1qhumuz">
         <di:waypoint x="500" y="177" />
-        <di:waypoint x="530" y="177" />
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Flow_14g5ljd_di" bpmnElement="Flow_14g5ljd">
-        <di:waypoint x="630" y="177" />
         <di:waypoint x="672" y="177" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
