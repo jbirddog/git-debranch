@@ -1,11 +1,5 @@
 # TODOs
 
-## v0.1.4
-
-1. bump version
-1. blocked on SpiffWorkflow 2.0?
-   1. or vendor in the short term?
-
 ## unordered
 
 1. don't fetch and prune by default?

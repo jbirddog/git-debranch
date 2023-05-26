@@ -6,7 +6,7 @@ def contents_of(filename):
 
 setup(
     name = "git-debranch",
-    version = "0.1.3",
+    version = "0.1.4",
     description = "Remove git branches",
     long_description = contents_of("README.md"),
     long_description_content_type = "text/markdown",
@@ -15,8 +15,7 @@ setup(
     author = "Jon Herron",
     author_email = "jon.herron@yahoo.com",
 
-    # uncomment after SpiffWorkflow 2.0 release
-    #install_requires = contents_of("requirements.txt"),
+    install_requires = contents_of("requirements.txt"),
     python_requires = ">=3.9",
 
     package_dir = {"": "src"},
