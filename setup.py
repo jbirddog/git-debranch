@@ -6,7 +6,7 @@ def contents_of(filename):
 
 setup(
     name = "git-debranch",
-    version = "0.1.4",
+    version = "0.1.5",
     description = "Remove git branches",
     long_description = contents_of("README.md"),
     long_description_content_type = "text/markdown",
