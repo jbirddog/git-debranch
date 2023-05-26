@@ -21,5 +21,5 @@
 1. --no-merge doesn't do exactly what I thought when squash+merge
    1. may be better to remove the merge/no-merge distinction?
    1. default is --all, add comand line args for --merged and --no-merged?
-1. need to treat branches like `main` differently show they don't show up in the
-   same section as local branches that have been merged but have a remote
+1. when there are no branches to delete, don't open $EDITOR
+   1. set stdout to "Nothing to do" or similar
