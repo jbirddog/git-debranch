@@ -16,7 +16,9 @@ check-ownership:
 
 .PHONY: run-editor
 run-editor: stop-editor
-	cd $(SPIFF_ARENA_DIR) && ./bin/run_editor $(BPMN_SPEC_DIR)
+	cd $(SPIFF_ARENA_DIR) && \
+		SPIFF_EDITOR_URL_PATH=/admin/process-models/bpmn:git-debranch \
+		./bin/run_editor $(BPMN_SPEC_DIR)
 
 .PHONY: stop-editor
 stop-editor:
