@@ -326,7 +326,8 @@ remote = branches_with_empty_prefix(remote)</bpmn:script>
     "origin/HEAD -> origin/main",
     "origin/g",
     "origin/h",
-    "origin/i"
+    "origin/i",
+    "origin/j/k"
   ],
   "unmerged": [
     "d",
@@ -357,6 +358,9 @@ remote = branches_with_empty_prefix(remote)</bpmn:script>
     ],
     "i": [
       "origin/i"
+    ],
+    "j/k": [
+      "origin/j/k"
     ]
   },
   "unmerged": [
@@ -390,9 +394,18 @@ def group_heads(head_branches):
         head[branch_name].append(branch)
     return head
 
+def group_remotes(remote_branches):
+    remote = {}
+    for branch in remote_branches:
+        branch_name = branch.split("/", maxsplit=1)[1]
+        if branch_name not in remote:
+            remote[branch_name] = []
+        remote[branch_name].append(branch)
+    return remote
 
 head, remote = separate_heads(remote)
-head = group_heads(head)</bpmn:script>
+head = group_heads(head)
+remote = group_remotes(remote)</bpmn:script>
     </bpmn:scriptTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
