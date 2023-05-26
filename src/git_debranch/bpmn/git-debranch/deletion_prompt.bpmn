@@ -36,7 +36,7 @@ def build_branch_report():
         "##",
         "## Any lines that are non empty and do not start with a # are assumed to ",
         "## be branch names, one per line. Each uncommented branch name will be ",
-        "## marked for deletion. HEAD branches are not shown.",
+        "## marked for deletion. HEAD and current branches are not shown.",
         "",
     ]
 
