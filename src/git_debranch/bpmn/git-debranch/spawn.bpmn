@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:spiffworkflow="http://spiffworkflow.org/bpmn/schema/1.0/core" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_96f6665" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.0.0-dev">
-  <bpmn:process id="Process_kpcnh5h" isExecutable="true">
+  <bpmn:process id="spawn_process" name="Spawn a New Process" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_090xnqj</bpmn:outgoing>
     </bpmn:startEvent>
@@ -16,7 +16,7 @@
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1gimdqy" sourceRef="Gateway_0o5auw6" targetRef="Event_1vc03l8" />
     <bpmn:sequenceFlow id="Flow_1msh4mr" sourceRef="Gateway_0o5auw6" targetRef="Event_08pdzal">
-      <bpmn:conditionExpression>result["resultcode"] != 0</bpmn:conditionExpression>
+      <bpmn:conditionExpression>result["returncode"] != 0</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:endEvent id="Event_08pdzal">
       <bpmn:incoming>Flow_1msh4mr</bpmn:incoming>
@@ -39,7 +39,7 @@
     <bpmn:association id="Association_06bmaew" sourceRef="Gateway_0o5auw6" targetRef="TextAnnotation_0kuplex" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
-    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_kpcnh5h">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="spawn_process">
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>

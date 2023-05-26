@@ -8,9 +8,6 @@ Git subcommand that uses [SpiffWorkflow](https://github.com/sartography/SpiffWor
 pip install git-debranch
 ```
 
-_Note: This is currently blocked on an upcoming release of SpiffWorkflow. Once resolved this will work.
-For now you need to clone the repo and do a local install: pip install -r requirements.txt_
-
 ## Usage
 
 ```

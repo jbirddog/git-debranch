@@ -1,10 +1,10 @@
 # TODOs
 
-## v0.1.4
+## v0.1.5
 
-1. bump version
-1. blocked on SpiffWorkflow 2.0?
-   1. or vendor in the short term?
+1. when there are no branches to delete, don't open $EDITOR
+   1. set stdout to "Nothing to do" or similar
+1. add changelog
 
 ## unordered
 
@@ -12,14 +12,11 @@
 1. command line args
    1. --dry-run
    1. --fetch-and-prune
+   1. --merged? --no-merged? --remotes?
 1. unit test with mock git service task
    1. wait to integration upcoming testing framework
 1. CI
    1. run tests (when ready, see above)
-   1. push to pypi
-1. git/DeleteBranch should get `branches_to_delete` via param instead of task data
-1. --no-merge doesn't do exactly what I thought when squash+merge
-   1. may be better to remove the merge/no-merge distinction?
-   1. default is --all, add comand line args for --merged and --no-merged?
-1. need to treat branches like `main` differently show they don't show up in the
-   same section as local branches that have been merged but have a remote
+1. integrate spiff-element-units
+   1. what does it mean for dev flow to get element units into package
+1. write spiff logs somewhere? --log?

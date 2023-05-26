@@ -12,7 +12,13 @@
     <bpmn:scriptTask id="Activity_1sjkjk0" name="Build branch report">
       <bpmn:incoming>Flow_0p7er6v</bpmn:incoming>
       <bpmn:outgoing>Flow_0pqk0gt</bpmn:outgoing>
-      <bpmn:script>def add_section(lines, section_lines, comment, header):
+      <bpmn:script>def local_only(branches):
+    return sorted(filter(lambda b: b not in head and b not in remote, branches))
+
+def has_remote(branches):
+    return sorted(filter(lambda b: b not in head and b in remote, branches))
+
+def add_section(lines, section_lines, comment, header):
     if len(section_lines) == 0:
         return
     lines.extend(header)
@@ -30,35 +36,41 @@ def build_branch_report():
         "##",
         "## Any lines that are non empty and do not start with a # are assumed to ",
         "## be branch names, one per line. Each uncommented branch name will be ",
-        "## marked for deletion.",
+        "## marked for deletion. HEAD and current branches are not shown.",
         "",
     ]
 
-    add_section(lines, branches["merged_local_only"], False, [
+    merged_local_only = local_only(merged)
+
+    add_section(lines, merged_local_only, False, [
         "## The following branches appear safe to delete. They exist locally ",
         "## but not on any remote and have been merged:",
     ])
 
-    add_section(lines, branches["merged_has_remote_branch"], True, [
-        "## The following branches exist locally as well as on a remote and ",
-        "## have been merged:",
-    ])
+    unmerged_local_only = local_only(unmerged)
 
-    add_section(lines, branches["unmerged_local_only"], True, [
+    add_section(lines, unmerged_local_only, True, [
         "## The following branches only exist locally but not may not have ", 
         "## been merged:",
     ])
 
-    add_section(lines, branches["unmerged_has_remote_branch"], True, [
+    merged_has_remote_branch = has_remote(merged)
+
+    add_section(lines, merged_has_remote_branch, True, [
+        "## The following branches exist locally as well as on a remote and ",
+        "## have been merged:",
+    ])
+
+    unmerged_has_remote_branch = has_remote(unmerged)
+
+    add_section(lines, unmerged_has_remote_branch, True, [
         "## The following branches exist locally as well as on a remote and ",
         "## may not have been merged:",
     ])
 
     return "\n".join(lines)
 
-branch_report = build_branch_report()
-
-del(branches)</bpmn:script>
+branch_report = build_branch_report()</bpmn:script>
     </bpmn:scriptTask>
     <bpmn:sequenceFlow id="Flow_0povx4i" sourceRef="confirm_deletion" targetRef="Activity_0a61ymz" />
     <bpmn:userTask id="confirm_deletion" name="Prompt for confirmation">
