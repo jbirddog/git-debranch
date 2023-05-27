@@ -1,9 +1,5 @@
 # TODOs
 
-## v0.1.5
-
-1. add changelog
-
 ## unordered
 
 1. don't fetch and prune by default?

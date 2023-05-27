@@ -32,4 +32,9 @@ setup(
         "console_scripts": ["git-debranch=git_debranch.console_scripts:main"],
     },
     py_modules = ["git-debranch"],
+
+    package_urls = {
+        "GitHub": "https://github.com/jbirddog/git-debranch",
+        "CHANGELOG": "https://github.com/jbirddog/git-debranch/blob/main/CHANGELOG.md",
+    },
 )
