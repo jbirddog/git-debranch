@@ -8,8 +8,27 @@
     <bpmn:endEvent id="Event_185zs44">
       <bpmn:incoming>Flow_1lsziov</bpmn:incoming>
     </bpmn:endEvent>
-    <bpmn:sequenceFlow id="Flow_0pqk0gt" sourceRef="Activity_1sjkjk0" targetRef="confirm_deletion" />
+    <bpmn:sequenceFlow id="Flow_0pqk0gt" sourceRef="Activity_1sjkjk0" targetRef="Gateway_008evke" />
     <bpmn:scriptTask id="Activity_1sjkjk0" name="Build branch report">
+      <bpmn:extensionElements>
+        <spiffworkflow:unitTests>
+          <spiffworkflow:unitTest id="no_branches_to_delete">
+            <spiffworkflow:inputJson>{
+    "merged": [],
+    "unmerged": [],
+    "head": {},
+    "remote": {}
+}</spiffworkflow:inputJson>
+            <spiffworkflow:expectedOutputJson>{
+  "branch_report": "",
+  "head": {},
+  "merged": [],
+  "remote": {},
+  "unmerged": []
+}</spiffworkflow:expectedOutputJson>
+          </spiffworkflow:unitTest>
+        </spiffworkflow:unitTests>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_0p7er6v</bpmn:incoming>
       <bpmn:outgoing>Flow_0pqk0gt</bpmn:outgoing>
       <bpmn:script>def local_only(branches):
@@ -29,6 +48,9 @@ def add_section(lines, section_lines, comment, header):
     lines.append("")
 
 def build_branch_report():
+    if len(merged) == 0 and len(unmerged) == 0:
+        return ""
+    
     lines = [
         "## git debranch",
         "##",
@@ -72,9 +94,9 @@ def build_branch_report():
 
 branch_report = build_branch_report()</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:sequenceFlow id="Flow_0povx4i" sourceRef="confirm_deletion" targetRef="Activity_0a61ymz" />
+    <bpmn:sequenceFlow id="Flow_0povx4i" sourceRef="confirm_deletion" targetRef="Gateway_1rx5xww" />
     <bpmn:userTask id="confirm_deletion" name="Prompt for confirmation">
-      <bpmn:incoming>Flow_0pqk0gt</bpmn:incoming>
+      <bpmn:incoming>Flow_0g02i6z</bpmn:incoming>
       <bpmn:outgoing>Flow_0povx4i</bpmn:outgoing>
     </bpmn:userTask>
     <bpmn:sequenceFlow id="Flow_1lsziov" sourceRef="Activity_0a61ymz" targetRef="Event_185zs44" />
@@ -102,7 +124,7 @@ branch_report = build_branch_report()</bpmn:script>
           </spiffworkflow:unitTest>
         </spiffworkflow:unitTests>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_0povx4i</bpmn:incoming>
+      <bpmn:incoming>Flow_05ccbhm</bpmn:incoming>
       <bpmn:outgoing>Flow_1lsziov</bpmn:outgoing>
       <bpmn:script>def branch_line(line):
     line = line.strip()
@@ -118,25 +140,56 @@ branches_to_delete = user_confirmed_branches()
 
 del(branch_report)</bpmn:script>
     </bpmn:scriptTask>
+    <bpmn:exclusiveGateway id="Gateway_008evke" default="Flow_0g02i6z">
+      <bpmn:incoming>Flow_0pqk0gt</bpmn:incoming>
+      <bpmn:outgoing>Flow_0g02i6z</bpmn:outgoing>
+      <bpmn:outgoing>Flow_1id4hgw</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0g02i6z" sourceRef="Gateway_008evke" targetRef="confirm_deletion" />
+    <bpmn:exclusiveGateway id="Gateway_1rx5xww">
+      <bpmn:incoming>Flow_0povx4i</bpmn:incoming>
+      <bpmn:incoming>Flow_1va60kj</bpmn:incoming>
+      <bpmn:outgoing>Flow_05ccbhm</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_05ccbhm" sourceRef="Gateway_1rx5xww" targetRef="Activity_0a61ymz" />
+    <bpmn:sequenceFlow id="Flow_1id4hgw" sourceRef="Gateway_008evke" targetRef="Activity_00hkuxb">
+      <bpmn:conditionExpression>branch_report == ""</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_1va60kj" sourceRef="Activity_00hkuxb" targetRef="Gateway_1rx5xww" />
+    <bpmn:scriptTask id="Activity_00hkuxb" name="Indicate no branches to delete">
+      <bpmn:incoming>Flow_1id4hgw</bpmn:incoming>
+      <bpmn:outgoing>Flow_1va60kj</bpmn:outgoing>
+      <bpmn:script>result = {"returncode": 0, "stdout": "No branches found to delete."}</bpmn:script>
+    </bpmn:scriptTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="deletion_prompt">
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_185zs44_di" bpmnElement="Event_185zs44">
-        <dc:Bounds x="692" y="159" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0wzugcm_di" bpmnElement="Activity_1sjkjk0">
         <dc:Bounds x="270" y="137" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_18aapsf_di" bpmnElement="confirm_deletion">
-        <dc:Bounds x="400" y="137" width="100" height="80" />
-        <bpmndi:BPMNLabel />
+      <bpmndi:BPMNShape id="Event_185zs44_di" bpmnElement="Event_185zs44">
+        <dc:Bounds x="872" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_14dv693_di" bpmnElement="Activity_0a61ymz">
-        <dc:Bounds x="530" y="137" width="100" height="80" />
+        <dc:Bounds x="730" y="137" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_008evke_di" bpmnElement="Gateway_008evke" isMarkerVisible="true">
+        <dc:Bounds x="405" y="152" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1rx5xww_di" bpmnElement="Gateway_1rx5xww" isMarkerVisible="true">
+        <dc:Bounds x="635" y="152" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_18aapsf_di" bpmnElement="confirm_deletion">
+        <dc:Bounds x="500" y="60" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1lqxs1e_di" bpmnElement="Activity_00hkuxb">
+        <dc:Bounds x="500" y="220" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0p7er6v_di" bpmnElement="Flow_0p7er6v">
@@ -145,15 +198,35 @@ del(branch_report)</bpmn:script>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0pqk0gt_di" bpmnElement="Flow_0pqk0gt">
         <di:waypoint x="370" y="177" />
-        <di:waypoint x="400" y="177" />
+        <di:waypoint x="405" y="177" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_0povx4i_di" bpmnElement="Flow_0povx4i">
-        <di:waypoint x="500" y="177" />
-        <di:waypoint x="530" y="177" />
+        <di:waypoint x="600" y="100" />
+        <di:waypoint x="660" y="100" />
+        <di:waypoint x="660" y="152" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1lsziov_di" bpmnElement="Flow_1lsziov">
-        <di:waypoint x="630" y="177" />
-        <di:waypoint x="692" y="177" />
+        <di:waypoint x="830" y="177" />
+        <di:waypoint x="872" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0g02i6z_di" bpmnElement="Flow_0g02i6z">
+        <di:waypoint x="430" y="152" />
+        <di:waypoint x="430" y="100" />
+        <di:waypoint x="500" y="100" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_05ccbhm_di" bpmnElement="Flow_05ccbhm">
+        <di:waypoint x="685" y="177" />
+        <di:waypoint x="730" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1id4hgw_di" bpmnElement="Flow_1id4hgw">
+        <di:waypoint x="430" y="202" />
+        <di:waypoint x="430" y="260" />
+        <di:waypoint x="500" y="260" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1va60kj_di" bpmnElement="Flow_1va60kj">
+        <di:waypoint x="600" y="260" />
+        <di:waypoint x="660" y="260" />
+        <di:waypoint x="660" y="202" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

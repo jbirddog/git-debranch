@@ -2,8 +2,6 @@
 
 ## v0.1.5
 
-1. when there are no branches to delete, don't open $EDITOR
-   1. set stdout to "Nothing to do" or similar
 1. add changelog
 
 ## unordered
