@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.1.6
+
+1. Fixed bug when not on a HEAD branch an empty report could be shown
+
 ## v0.1.5
 
 1. Updated editor support to deep link to process model
