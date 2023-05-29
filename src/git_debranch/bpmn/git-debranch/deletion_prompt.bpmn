@@ -48,19 +48,7 @@ def add_section(lines, section_lines, comment, header):
     lines.append("")
 
 def build_branch_report():
-    if len(merged) == 0 and len(unmerged) == 0:
-        return ""
-    
-    lines = [
-        "## git debranch",
-        "##",
-        "## Select branches to delete.",
-        "##",
-        "## Any lines that are non empty and do not start with a # are assumed to ",
-        "## be branch names, one per line. Each uncommented branch name will be ",
-        "## marked for deletion. HEAD and current branches are not shown.",
-        "",
-    ]
+    lines = []
 
     merged_local_only = local_only(merged)
 
@@ -89,6 +77,18 @@ def build_branch_report():
         "## The following branches exist locally as well as on a remote and ",
         "## may not have been merged:",
     ])
+
+    if len(lines) &gt; 0:
+        lines = [
+            "## git debranch",
+            "##",
+            "## Select branches to delete.",
+            "##",
+            "## Any lines that are non empty and do not start with a # are assumed to ",
+            "## be branch names, one per line. Each uncommented branch name will be ",
+            "## marked for deletion. HEAD and current branches are not shown.",
+            "",
+        ] + lines
 
     return "\n".join(lines)
 
@@ -167,12 +167,16 @@ del(branch_report)</bpmn:script>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_185zs44_di" bpmnElement="Event_185zs44">
+        <dc:Bounds x="872" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0wzugcm_di" bpmnElement="Activity_1sjkjk0">
         <dc:Bounds x="270" y="137" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_185zs44_di" bpmnElement="Event_185zs44">
-        <dc:Bounds x="872" y="159" width="36" height="36" />
+      <bpmndi:BPMNShape id="Activity_18aapsf_di" bpmnElement="confirm_deletion">
+        <dc:Bounds x="500" y="60" width="100" height="80" />
+        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_14dv693_di" bpmnElement="Activity_0a61ymz">
         <dc:Bounds x="730" y="137" width="100" height="80" />
@@ -183,10 +187,6 @@ del(branch_report)</bpmn:script>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_1rx5xww_di" bpmnElement="Gateway_1rx5xww" isMarkerVisible="true">
         <dc:Bounds x="635" y="152" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_18aapsf_di" bpmnElement="confirm_deletion">
-        <dc:Bounds x="500" y="60" width="100" height="80" />
-        <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1lqxs1e_di" bpmnElement="Activity_00hkuxb">
         <dc:Bounds x="500" y="220" width="100" height="80" />
