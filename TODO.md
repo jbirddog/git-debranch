@@ -2,11 +2,6 @@
 
 ## unordered
 
-1. don't fetch and prune by default?
-1. command line args
-   1. --dry-run
-   1. --fetch-and-prune
-   1. --merged? --no-merged? --remotes?
 1. unit test with mock git service task
    1. wait to integration upcoming testing framework
 1. CI

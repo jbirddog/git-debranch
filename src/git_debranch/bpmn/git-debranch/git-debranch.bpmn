@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" id="Definitions_96f6665" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.0.0-dev">
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:spiffworkflow="http://spiffworkflow.org/bpmn/schema/1.0/core" id="Definitions_96f6665" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.0.0-dev">
   <bpmn:process id="git-debranch" name="Git Debranch" isExecutable="true">
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_13piout</bpmn:outgoing>
@@ -8,10 +8,13 @@
       <bpmn:incoming>Flow_1uy858t</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:callActivity id="Activity_19gnuol" name="Find all branches" calledElement="get_all_branches">
-      <bpmn:incoming>Flow_13piout</bpmn:incoming>
+      <bpmn:extensionElements>
+        <spiffworkflow:preScript>offline=args["offline"]</spiffworkflow:preScript>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_0qlqg11</bpmn:incoming>
       <bpmn:outgoing>Flow_1cuvdpi</bpmn:outgoing>
     </bpmn:callActivity>
-    <bpmn:sequenceFlow id="Flow_13piout" sourceRef="StartEvent_1" targetRef="Activity_19gnuol" />
+    <bpmn:sequenceFlow id="Flow_13piout" sourceRef="StartEvent_1" targetRef="Activity_0d3j8od" />
     <bpmn:sequenceFlow id="Flow_1026mcr" sourceRef="Activity_0k872kx" targetRef="Activity_10dkgjv" />
     <bpmn:callActivity id="Activity_0k872kx" name="Parse branches" calledElement="branch_parser">
       <bpmn:incoming>Flow_1cuvdpi</bpmn:incoming>
@@ -24,15 +27,44 @@
     </bpmn:callActivity>
     <bpmn:sequenceFlow id="Flow_1uy858t" sourceRef="Activity_1h49w3b" targetRef="Event_1wlwe0w" />
     <bpmn:callActivity id="Activity_1h49w3b" name="Delete branches" calledElement="delete_branches">
+      <bpmn:extensionElements>
+        <spiffworkflow:preScript>dry_run=args["dry_run"]</spiffworkflow:preScript>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1ikchnf</bpmn:incoming>
       <bpmn:outgoing>Flow_1uy858t</bpmn:outgoing>
     </bpmn:callActivity>
     <bpmn:sequenceFlow id="Flow_1cuvdpi" sourceRef="Activity_19gnuol" targetRef="Activity_0k872kx" />
+    <bpmn:sequenceFlow id="Flow_0qlqg11" sourceRef="Activity_0d3j8od" targetRef="Activity_19gnuol" />
+    <bpmn:scriptTask id="Activity_0d3j8od" name="Parse args">
+      <bpmn:incoming>Flow_13piout</bpmn:incoming>
+      <bpmn:outgoing>Flow_0qlqg11</bpmn:outgoing>
+      <bpmn:script>def parse_args():
+    import argparse
+
+    parser = argparse.ArgumentParser(description='Delete local git branches')
+    parser.add_argument('--offline', action='store_true', help='Do not run online operations such as fetch and prune')
+    parser.add_argument('--dry-run', action='store_true', help='Do not actually delete branches')
+
+    args = vars(parser.parse_args())
+    return args
+
+args = parse_args()</bpmn:script>
+    </bpmn:scriptTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="git-debranch">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="242" y="162" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1wlwe0w_di" bpmnElement="Event_1wlwe0w">
+        <dc:Bounds x="1022" y="156" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0sh6juq_di" bpmnElement="Activity_19gnuol">
         <dc:Bounds x="480" y="137" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0f41p31_di" bpmnElement="Activity_0k872kx">
+        <dc:Bounds x="610" y="134" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1gy062s_di" bpmnElement="Activity_10dkgjv">
@@ -43,19 +75,13 @@
         <dc:Bounds x="890" y="134" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1wlwe0w_di" bpmnElement="Event_1wlwe0w">
-        <dc:Bounds x="1022" y="156" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="412" y="162" width="36" height="36" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Activity_0f41p31_di" bpmnElement="Activity_0k872kx">
-        <dc:Bounds x="610" y="134" width="100" height="80" />
+      <bpmndi:BPMNShape id="Activity_1casc2p_di" bpmnElement="Activity_0d3j8od">
+        <dc:Bounds x="330" y="140" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_13piout_di" bpmnElement="Flow_13piout">
-        <di:waypoint x="448" y="180" />
-        <di:waypoint x="480" y="180" />
+        <di:waypoint x="278" y="180" />
+        <di:waypoint x="330" y="180" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1026mcr_di" bpmnElement="Flow_1026mcr">
         <di:waypoint x="710" y="174" />
@@ -72,6 +98,10 @@
       <bpmndi:BPMNEdge id="Flow_1cuvdpi_di" bpmnElement="Flow_1cuvdpi">
         <di:waypoint x="580" y="177" />
         <di:waypoint x="610" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0qlqg11_di" bpmnElement="Flow_0qlqg11">
+        <di:waypoint x="430" y="180" />
+        <di:waypoint x="480" y="180" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>

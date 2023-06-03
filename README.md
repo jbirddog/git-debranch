@@ -8,7 +8,7 @@ Git subcommand that uses [SpiffWorkflow](https://github.com/sartography/SpiffWor
 pip install git-debranch
 ```
 
-## Usage
+## Running
 
 ```
 git debranch
@@ -18,7 +18,21 @@ From inside a git repository, running `git debranch` will present you with a lis
 be deleted. This list is presented using `$EDITOR`. If the environment variable is not set `vi` is used 
 as the fallback.
 
-*Please note `git fetch -p` is run before the branch list is presented.*
+*Please note `git fetch -p` is run before the branch list is presented. This can be disabled by providing
+the --offline switch.*
+
+## Usage
+
+```
+usage: git debranch [-h] [--offline] [--dry-run]
+
+Delete local git branches
+
+options:
+  -h          show this help message and exit
+  --offline   Do not run online operations such as fetch and prune
+  --dry-run   Do not actually delete branches
+```
 
 ## Editing the Branch List
 
