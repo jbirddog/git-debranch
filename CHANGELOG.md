@@ -3,6 +3,7 @@
 ## v0.1.6
 
 1. Fixed bug when not on a HEAD branch an empty report could be shown
+1. Fixed issue where terminate end events inside a bpmn subprocess did not do what I thought they did
 
 ## v0.1.5
 
