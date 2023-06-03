@@ -15,13 +15,9 @@
       <bpmn:incoming>Flow_1gimdqy</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1gimdqy" sourceRef="Gateway_0o5auw6" targetRef="Event_1vc03l8" />
-    <bpmn:sequenceFlow id="Flow_1msh4mr" sourceRef="Gateway_0o5auw6" targetRef="Event_08pdzal">
+    <bpmn:sequenceFlow id="Flow_1msh4mr" sourceRef="Gateway_0o5auw6" targetRef="Activity_1ufh8x7">
       <bpmn:conditionExpression>result["returncode"] != 0</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
-    <bpmn:endEvent id="Event_08pdzal">
-      <bpmn:incoming>Flow_1msh4mr</bpmn:incoming>
-      <bpmn:terminateEventDefinition id="TerminateEventDefinition_16l45dq" />
-    </bpmn:endEvent>
     <bpmn:serviceTask id="Activity_1wobbp0" name="Spawn a process">
       <bpmn:extensionElements>
         <spiffworkflow:serviceTaskOperator id="os/SpawnProcess" resultVariable="result">
@@ -33,13 +29,29 @@
       <bpmn:incoming>Flow_090xnqj</bpmn:incoming>
       <bpmn:outgoing>Flow_1cl2vgj</bpmn:outgoing>
     </bpmn:serviceTask>
-    <bpmn:textAnnotation id="TextAnnotation_0kuplex">
-      <bpmn:text>This behaves like spawn+unwrap. Maybe rename if reusing or make spawn_unwrap.bpmn</bpmn:text>
+    <bpmn:sequenceFlow id="Flow_0utbnx3" sourceRef="Activity_1ufh8x7" targetRef="Event_08pdzal" />
+    <bpmn:endEvent id="Event_08pdzal">
+      <bpmn:incoming>Flow_0utbnx3</bpmn:incoming>
+    </bpmn:endEvent>
+    <bpmn:scriptTask id="Activity_1ufh8x7" name="unwrap">
+      <bpmn:incoming>Flow_1msh4mr</bpmn:incoming>
+      <bpmn:outgoing>Flow_0utbnx3</bpmn:outgoing>
+      <bpmn:script>import sys
+
+print(result["stderr"], file=sys.stderr)
+exit(result["returncode"])</bpmn:script>
+    </bpmn:scriptTask>
+    <bpmn:textAnnotation id="TextAnnotation_1gt83ai">
+      <bpmn:text>Not how i want to handle this but I might be in too deep with the subprocesses and what is supported.</bpmn:text>
     </bpmn:textAnnotation>
-    <bpmn:association id="Association_06bmaew" sourceRef="Gateway_0o5auw6" targetRef="TextAnnotation_0kuplex" />
+    <bpmn:association id="Association_1hdvgtw" sourceRef="Activity_1ufh8x7" targetRef="TextAnnotation_1gt83ai" />
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="spawn_process">
+      <bpmndi:BPMNShape id="TextAnnotation_1gt83ai_di" bpmnElement="TextAnnotation_1gt83ai">
+        <dc:Bounds x="500" y="370" width="100" height="142" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="179" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>
@@ -49,17 +61,21 @@
       <bpmndi:BPMNShape id="Event_1vc03l8_di" bpmnElement="Event_1vc03l8">
         <dc:Bounds x="532" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1vzcyjv_di" bpmnElement="Event_08pdzal">
-        <dc:Bounds x="532" y="272" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1qk1mwi_di" bpmnElement="Activity_1wobbp0">
         <dc:Bounds x="270" y="137" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_0kuplex_di" bpmnElement="TextAnnotation_0kuplex">
-        <dc:Bounds x="480" y="-20" width="100" height="127" />
+      <bpmndi:BPMNShape id="Event_12c7q1f_di" bpmnElement="Event_08pdzal">
+        <dc:Bounds x="622" y="272" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1hcqe3e_di" bpmnElement="Activity_1ufh8x7">
+        <dc:Bounds x="480" y="250" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Association_1hdvgtw_di" bpmnElement="Association_1hdvgtw">
+        <di:waypoint x="538" y="330" />
+        <di:waypoint x="547" y="370" />
+      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_090xnqj_di" bpmnElement="Flow_090xnqj">
         <di:waypoint x="215" y="177" />
         <di:waypoint x="270" y="177" />
@@ -75,11 +91,11 @@
       <bpmndi:BPMNEdge id="Flow_1msh4mr_di" bpmnElement="Flow_1msh4mr">
         <di:waypoint x="450" y="202" />
         <di:waypoint x="450" y="290" />
-        <di:waypoint x="532" y="290" />
+        <di:waypoint x="480" y="290" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_06bmaew_di" bpmnElement="Association_06bmaew">
-        <di:waypoint x="458" y="160" />
-        <di:waypoint x="480" y="107" />
+      <bpmndi:BPMNEdge id="Flow_0utbnx3_di" bpmnElement="Flow_0utbnx3">
+        <di:waypoint x="580" y="290" />
+        <di:waypoint x="622" y="290" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
