@@ -27,6 +27,9 @@
     </bpmn:callActivity>
     <bpmn:sequenceFlow id="Flow_1uy858t" sourceRef="Activity_1h49w3b" targetRef="Event_1wlwe0w" />
     <bpmn:callActivity id="Activity_1h49w3b" name="Delete branches" calledElement="delete_branches">
+      <bpmn:extensionElements>
+        <spiffworkflow:preScript>dry_run=args["dry_run"]</spiffworkflow:preScript>
+      </bpmn:extensionElements>
       <bpmn:incoming>Flow_1ikchnf</bpmn:incoming>
       <bpmn:outgoing>Flow_1uy858t</bpmn:outgoing>
     </bpmn:callActivity>
@@ -50,6 +53,9 @@ args = parse_args()</bpmn:script>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="git-debranch">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="242" y="162" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1wlwe0w_di" bpmnElement="Event_1wlwe0w">
         <dc:Bounds x="1022" y="156" width="36" height="36" />
       </bpmndi:BPMNShape>
@@ -72,9 +78,6 @@ args = parse_args()</bpmn:script>
       <bpmndi:BPMNShape id="Activity_1casc2p_di" bpmnElement="Activity_0d3j8od">
         <dc:Bounds x="330" y="140" width="100" height="80" />
         <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="242" y="162" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_13piout_di" bpmnElement="Flow_13piout">
         <di:waypoint x="278" y="180" />

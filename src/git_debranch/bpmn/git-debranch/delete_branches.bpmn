@@ -13,17 +13,17 @@
       <bpmn:outgoing>Flow_1lxcorc</bpmn:outgoing>
       <bpmn:outgoing>Flow_1cn71yy</bpmn:outgoing>
     </bpmn:exclusiveGateway>
-    <bpmn:sequenceFlow id="Flow_1lxcorc" sourceRef="Gateway_1ltog1i" targetRef="Activity_1yt24dj" />
+    <bpmn:sequenceFlow id="Flow_1lxcorc" sourceRef="Gateway_1ltog1i" targetRef="Gateway_07vqtbt" />
     <bpmn:sequenceFlow id="Flow_1cn71yy" sourceRef="Gateway_1ltog1i" targetRef="Gateway_0w96sv3">
       <bpmn:conditionExpression>len(branches_to_delete) == 0</bpmn:conditionExpression>
     </bpmn:sequenceFlow>
     <bpmn:exclusiveGateway id="Gateway_0w96sv3">
       <bpmn:incoming>Flow_1cn71yy</bpmn:incoming>
-      <bpmn:incoming>Flow_1iyvi2c</bpmn:incoming>
+      <bpmn:incoming>Flow_0b6k53w</bpmn:incoming>
       <bpmn:outgoing>Flow_0v4mach</bpmn:outgoing>
     </bpmn:exclusiveGateway>
     <bpmn:sequenceFlow id="Flow_0v4mach" sourceRef="Gateway_0w96sv3" targetRef="Event_1bsl2ov" />
-    <bpmn:sequenceFlow id="Flow_1iyvi2c" sourceRef="Activity_1yt24dj" targetRef="Gateway_0w96sv3" />
+    <bpmn:sequenceFlow id="Flow_1iyvi2c" sourceRef="Activity_1yt24dj" targetRef="Gateway_1jb67dn" />
     <bpmn:serviceTask id="Activity_1yt24dj" name="Delete selected branches">
       <bpmn:extensionElements>
         <spiffworkflow:serviceTaskOperator id="os/SpawnProcess" resultVariable="result">
@@ -32,9 +32,33 @@
           </spiffworkflow:parameters>
         </spiffworkflow:serviceTaskOperator>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_1lxcorc</bpmn:incoming>
+      <bpmn:incoming>Flow_0w5mz6n</bpmn:incoming>
       <bpmn:outgoing>Flow_1iyvi2c</bpmn:outgoing>
     </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_07vqtbt" default="Flow_0w5mz6n">
+      <bpmn:incoming>Flow_1lxcorc</bpmn:incoming>
+      <bpmn:outgoing>Flow_0w5mz6n</bpmn:outgoing>
+      <bpmn:outgoing>Flow_00p4mau</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0w5mz6n" sourceRef="Gateway_07vqtbt" targetRef="Activity_1yt24dj" />
+    <bpmn:exclusiveGateway id="Gateway_1jb67dn">
+      <bpmn:incoming>Flow_1iyvi2c</bpmn:incoming>
+      <bpmn:incoming>Flow_12z8ned</bpmn:incoming>
+      <bpmn:outgoing>Flow_0b6k53w</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_0b6k53w" sourceRef="Gateway_1jb67dn" targetRef="Gateway_0w96sv3" />
+    <bpmn:sequenceFlow id="Flow_00p4mau" sourceRef="Gateway_07vqtbt" targetRef="Activity_1n96cpz">
+      <bpmn:conditionExpression>dry_run</bpmn:conditionExpression>
+    </bpmn:sequenceFlow>
+    <bpmn:sequenceFlow id="Flow_12z8ned" sourceRef="Activity_1n96cpz" targetRef="Gateway_1jb67dn" />
+    <bpmn:scriptTask id="Activity_1n96cpz" name="Show dry run results">
+      <bpmn:incoming>Flow_00p4mau</bpmn:incoming>
+      <bpmn:outgoing>Flow_12z8ned</bpmn:outgoing>
+      <bpmn:script>print("Skipping branch -D because --dry-run.\n\nWould have deleted:")
+
+for branch in branches_to_delete:
+    print(f"\t{branch}")</bpmn:script>
+    </bpmn:scriptTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="delete_branches">
@@ -51,7 +75,17 @@
         <dc:Bounds x="535" y="152" width="50" height="50" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_080uqjc_di" bpmnElement="Activity_1yt24dj">
-        <dc:Bounds x="360" y="200" width="100" height="80" />
+        <dc:Bounds x="370" y="210" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_07vqtbt_di" bpmnElement="Gateway_07vqtbt" isMarkerVisible="true">
+        <dc:Bounds x="295" y="285" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1jb67dn_di" bpmnElement="Gateway_1jb67dn" isMarkerVisible="true">
+        <dc:Bounds x="495" y="285" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_15tqjgt_di" bpmnElement="Activity_1n96cpz">
+        <dc:Bounds x="370" y="330" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0ecta24_di" bpmnElement="Flow_0ecta24">
@@ -60,8 +94,8 @@
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1lxcorc_di" bpmnElement="Flow_1lxcorc">
         <di:waypoint x="270" y="202" />
-        <di:waypoint x="270" y="240" />
-        <di:waypoint x="360" y="240" />
+        <di:waypoint x="270" y="310" />
+        <di:waypoint x="295" y="310" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1cn71yy_di" bpmnElement="Flow_1cn71yy">
         <di:waypoint x="295" y="177" />
@@ -72,9 +106,29 @@
         <di:waypoint x="612" y="177" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1iyvi2c_di" bpmnElement="Flow_1iyvi2c">
-        <di:waypoint x="460" y="240" />
-        <di:waypoint x="560" y="240" />
+        <di:waypoint x="470" y="250" />
+        <di:waypoint x="520" y="250" />
+        <di:waypoint x="520" y="285" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0w5mz6n_di" bpmnElement="Flow_0w5mz6n">
+        <di:waypoint x="320" y="285" />
+        <di:waypoint x="320" y="250" />
+        <di:waypoint x="370" y="250" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0b6k53w_di" bpmnElement="Flow_0b6k53w">
+        <di:waypoint x="545" y="310" />
+        <di:waypoint x="560" y="310" />
         <di:waypoint x="560" y="202" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00p4mau_di" bpmnElement="Flow_00p4mau">
+        <di:waypoint x="320" y="335" />
+        <di:waypoint x="320" y="370" />
+        <di:waypoint x="370" y="370" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_12z8ned_di" bpmnElement="Flow_12z8ned">
+        <di:waypoint x="470" y="370" />
+        <di:waypoint x="520" y="370" />
+        <di:waypoint x="520" y="335" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
