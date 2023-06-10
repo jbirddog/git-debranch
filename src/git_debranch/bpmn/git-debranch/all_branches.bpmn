@@ -78,9 +78,9 @@ del(remote_branches_result)
 del(current_branch_result)
 del(spawn_args)</bpmn:script>
     </bpmn:scriptTask>
-    <bpmn:sequenceFlow id="Flow_04ggq0k" sourceRef="Activity_1rwssw3" targetRef="Event_1y1qa7g" />
+    <bpmn:sequenceFlow id="Flow_04ggq0k" sourceRef="Activity_1rwssw3" targetRef="Activity_1hlm5mj" />
     <bpmn:endEvent id="Event_1y1qa7g">
-      <bpmn:incoming>Flow_04ggq0k</bpmn:incoming>
+      <bpmn:incoming>Flow_1xmmpui</bpmn:incoming>
     </bpmn:endEvent>
     <bpmn:sequenceFlow id="Flow_1ogqfb8" sourceRef="Activity_0lb6dii" targetRef="Gateway_0te47lu" />
     <bpmn:sequenceFlow id="Flow_0plnctp" sourceRef="Gateway_0gmspex" targetRef="Activity_1rwssw3" />
@@ -156,6 +156,26 @@ del(spawn_args)</bpmn:script>
       <bpmn:outgoing>Flow_0zq7ab2</bpmn:outgoing>
       <bpmn:script>print("Skipping fetch -p because --offline")</bpmn:script>
     </bpmn:scriptTask>
+    <bpmn:sequenceFlow id="Flow_1xmmpui" sourceRef="Activity_1hlm5mj" targetRef="Event_1y1qa7g" />
+    <bpmn:callActivity id="Activity_1hlm5mj" name="Get branches v2" calledElement="spawn_process">
+      <bpmn:extensionElements>
+        <spiffworkflow:preScript>spawn_args_map = {
+    "merged": ["git", "branch", "--merged"],
+    "unmerged": ["git", "branch", "--no-merged"],
+    "remotes": ["git", "branch", "--remotes"],
+    "current": ["git", "branch", "--show-current"],
+}</spiffworkflow:preScript>
+        <spiffworkflow:postScript>print(branch_results)</spiffworkflow:postScript>
+      </bpmn:extensionElements>
+      <bpmn:incoming>Flow_04ggq0k</bpmn:incoming>
+      <bpmn:outgoing>Flow_1xmmpui</bpmn:outgoing>
+      <bpmn:multiInstanceLoopCharacteristics>
+        <bpmn:loopDataInputRef>spawn_args_map</bpmn:loopDataInputRef>
+        <bpmn:loopDataOutputRef>branch_results</bpmn:loopDataOutputRef>
+        <bpmn:inputDataItem id="spawn_args" name="spawn_args" />
+        <bpmn:outputDataItem id="result" name="result" />
+      </bpmn:multiInstanceLoopCharacteristics>
+    </bpmn:callActivity>
     <bpmn:textAnnotation id="TextAnnotation_1b81gty">
       <bpmn:text>Would like to look at making this a multi-instance once things are merged.</bpmn:text>
     </bpmn:textAnnotation>
@@ -163,6 +183,9 @@ del(spawn_args)</bpmn:script>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="get_all_branches">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="-88" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_120o0l4_di" bpmnElement="Gateway_07vk4jr">
         <dc:Bounds x="265" y="152" width="50" height="50" />
       </bpmndi:BPMNShape>
@@ -172,9 +195,6 @@ del(spawn_args)</bpmn:script>
       <bpmndi:BPMNShape id="Activity_097d5gt_di" bpmnElement="Activity_1rwssw3">
         <dc:Bounds x="610" y="137" width="100" height="80" />
         <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1y1qa7g_di" bpmnElement="Event_1y1qa7g">
-        <dc:Bounds x="752" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1lc0i0u_di" bpmnElement="Activity_09d782o">
         <dc:Bounds x="370" y="-20" width="100" height="80" />
@@ -192,24 +212,28 @@ del(spawn_args)</bpmn:script>
         <dc:Bounds x="370" y="290" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="TextAnnotation_1b81gty_di" bpmnElement="TextAnnotation_1b81gty">
-        <dc:Bounds x="160" y="-63" width="100" height="98" />
-        <bpmndi:BPMNLabel />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0gv5hia_di" bpmnElement="Activity_0lb6dii">
         <dc:Bounds x="70" y="137" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Gateway_0te47lu_di" bpmnElement="Gateway_0te47lu" isMarkerVisible="true">
-        <dc:Bounds x="195" y="152" width="50" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="-88" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Gateway_0jfksvo_di" bpmnElement="Gateway_0jfksvo" isMarkerVisible="true">
         <dc:Bounds x="-25" y="152" width="50" height="50" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0te47lu_di" bpmnElement="Gateway_0te47lu" isMarkerVisible="true">
+        <dc:Bounds x="195" y="152" width="50" height="50" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_1pi1x08_di" bpmnElement="Activity_11bxwa4">
         <dc:Bounds x="70" y="250" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="TextAnnotation_1b81gty_di" bpmnElement="TextAnnotation_1b81gty">
+        <dc:Bounds x="160" y="-63" width="100" height="98" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1y1qa7g_di" bpmnElement="Event_1y1qa7g">
+        <dc:Bounds x="902" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_1brltkx_di" bpmnElement="Activity_1hlm5mj">
+        <dc:Bounds x="750" y="137" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0hezl4t_di" bpmnElement="Flow_0hezl4t">
@@ -223,7 +247,7 @@ del(spawn_args)</bpmn:script>
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_04ggq0k_di" bpmnElement="Flow_04ggq0k">
         <di:waypoint x="710" y="177" />
-        <di:waypoint x="752" y="177" />
+        <di:waypoint x="750" y="177" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1ogqfb8_di" bpmnElement="Flow_1ogqfb8">
         <di:waypoint x="170" y="177" />
@@ -268,10 +292,6 @@ del(spawn_args)</bpmn:script>
         <di:waypoint x="550" y="330" />
         <di:waypoint x="550" y="202" />
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge id="Association_06jn47e_di" bpmnElement="Association_06jn47e">
-        <di:waypoint x="283" y="159" />
-        <di:waypoint x="239" y="35" />
-      </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1pz1noe_di" bpmnElement="Flow_1pz1noe">
         <di:waypoint x="25" y="177" />
         <di:waypoint x="70" y="177" />
@@ -289,6 +309,14 @@ del(spawn_args)</bpmn:script>
         <di:waypoint x="170" y="290" />
         <di:waypoint x="220" y="290" />
         <di:waypoint x="220" y="202" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Association_06jn47e_di" bpmnElement="Association_06jn47e">
+        <di:waypoint x="283" y="159" />
+        <di:waypoint x="239" y="35" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1xmmpui_di" bpmnElement="Flow_1xmmpui">
+        <di:waypoint x="850" y="177" />
+        <di:waypoint x="902" y="177" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
