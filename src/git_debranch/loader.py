@@ -1,3 +1,4 @@
+import io
 import json
 import os
 import pkgutil
@@ -34,16 +35,17 @@ def _bpmn_data_paths():
     ]
     return map(_bpmn_data_path, bpmn_filenames)
 
-def _get_data_str(data_path):
-    return pkgutil.get_data("git_debranch", data_path).decode("utf-8")
+def _get_data(data_path):
+    return pkgutil.get_data("git_debranch", data_path)
 
-def _bpmn_strs():
-    return map(_get_data_str, _bpmn_data_paths())
+def _get_data_str(data_path):
+    return _get_data(data_path).decode("utf-8")
+
+def _bpmn_data():
+    return map(_get_data, _bpmn_data_paths())
 
 def _parser():
     parser = SpiffBpmnParser()
-    for bpmn_str in _bpmn_strs():
-        # TODO: hack - replace with better solution - add_bpmn_str doesn't allow:
-        bpmn_str = bpmn_str.replace('<?xml version="1.0" encoding="UTF-8"?>', '')
-        parser.add_bpmn_str(bpmn_str)
+    for data in _bpmn_data():
+        parser.add_bpmn_io(io.BytesIO(data))
     return parser
