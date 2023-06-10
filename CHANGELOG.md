@@ -1,5 +1,9 @@
 # CHANGELOG
 
+## v0.1.7
+
+1. Removed hack when loading bpmn file content
+
 ## v0.1.6
 
 1. Fixed bug when not on a HEAD branch an empty report could be shown
