@@ -17,6 +17,7 @@
           </spiffworkflow:parameters>
         </spiffworkflow:serviceTaskOperator>
         <spiffworkflow:preScript>spawn_args = ["git", "fetch", "-p"]</spiffworkflow:preScript>
+        <spiffworkflow:postScript>del(spawn_args)</spiffworkflow:postScript>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1pz1noe</bpmn:incoming>
       <bpmn:outgoing>Flow_1ogqfb8</bpmn:outgoing>
@@ -50,7 +51,7 @@
     "remote": ["git", "branch", "--remotes"],
     "current": ["git", "branch", "--show-current"],
 }</spiffworkflow:preScript>
-        <spiffworkflow:postScript></spiffworkflow:postScript>
+        <spiffworkflow:postScript />
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0u9n5gg</bpmn:incoming>
       <bpmn:outgoing>Flow_1xmmpui</bpmn:outgoing>
@@ -89,6 +90,9 @@ del(branch_results)</bpmn:script>
       <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
         <dc:Bounds x="-88" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Event_1y1qa7g_di" bpmnElement="Event_1y1qa7g">
+        <dc:Bounds x="562" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0gv5hia_di" bpmnElement="Activity_0lb6dii">
         <dc:Bounds x="70" y="137" width="100" height="80" />
       </bpmndi:BPMNShape>
@@ -108,9 +112,6 @@ del(branch_results)</bpmn:script>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Activity_0yfd7t4_di" bpmnElement="Activity_0ajua2d">
         <dc:Bounds x="430" y="137" width="100" height="80" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="Event_1y1qa7g_di" bpmnElement="Event_1y1qa7g">
-        <dc:Bounds x="562" y="159" width="36" height="36" />
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_0hezl4t_di" bpmnElement="Flow_0hezl4t">
         <di:waypoint x="-52" y="177" />
