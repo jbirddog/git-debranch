@@ -3,6 +3,7 @@
 ## v0.1.7
 
 1. Removed hack when loading bpmn file content
+1. Migrated git branch queries to multi-instance task
 
 ## v0.1.6
 
