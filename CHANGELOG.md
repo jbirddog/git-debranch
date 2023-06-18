@@ -4,6 +4,7 @@
 
 1. Removed hack when loading bpmn file content
 1. Migrated git branch queries to multi-instance task
+1. Bump to SpiffWorkflow 2.0.1
 
 ## v0.1.6
 
