@@ -30,7 +30,9 @@ def _edit_task_data(task_data, variable_to_edit):
     with tempfile.NamedTemporaryFile() as tf:
         tf.write(value.encode("utf-8"))
         tf.flush()
-        subprocess.run([editor, tf.name])
+        cmd = editor.split(" ")
+        cmd.append(tf.name)
+        subprocess.run(cmd)
         tf.seek(0)
         value = tf.read().decode("utf-8")
     task_data[variable_to_edit] = value
