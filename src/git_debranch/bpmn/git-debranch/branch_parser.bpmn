@@ -48,9 +48,7 @@
       <bpmn:incoming>Flow_0zt50xr</bpmn:incoming>
       <bpmn:outgoing>Flow_0c9l7wr</bpmn:outgoing>
       <bpmn:script>def to_list(branches):
-    parts = branches.split("\n")
-    non_empty_parts = filter(len, parts)
-    return list(non_empty_parts)
+    return [l for l in branches.splitlines() if len(l) &gt; 0]
 
 merged = to_list(merged)
 unmerged = to_list(unmerged)
@@ -109,13 +107,8 @@ current = current.strip()</bpmn:script>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_0c9l7wr</bpmn:incoming>
       <bpmn:outgoing>Flow_1qhumuz</bpmn:outgoing>
-      <bpmn:script>def branch_with_empty_prefix(branch):
-    if len(branch) &lt; 2 or branch[:2] != "  ":
-        return None
-    return branch[2:]
-
-def branches_with_empty_prefix(branches):
-    return list(filter(None, map(branch_with_empty_prefix, branches)))
+      <bpmn:script>def branches_with_empty_prefix(branches):
+    return [b[2:] for b in branches if b.startswith("  ") and len(b) &gt; 2]
 
 merged = branches_with_empty_prefix(merged)
 unmerged = branches_with_empty_prefix(unmerged)
