@@ -32,10 +32,10 @@
       <bpmn:incoming>Flow_0p7er6v</bpmn:incoming>
       <bpmn:outgoing>Flow_0pqk0gt</bpmn:outgoing>
       <bpmn:script>def local_only(branches):
-    return sorted(filter(lambda b: b not in head and b not in remote, branches))
+    return sorted([b for b in branches if b not in head and b not in remote])
 
 def has_remote(branches):
-    return sorted(filter(lambda b: b not in head and b in remote, branches))
+    return sorted([b for b in branches if b not in head and b in remote])
 
 def add_section(lines, section_lines, comment, header):
     if len(section_lines) == 0:
@@ -43,7 +43,7 @@ def add_section(lines, section_lines, comment, header):
     lines.extend(header)
     lines.append("")
     if comment:
-        section_lines = map(lambda l: f"# {l}", section_lines)
+        section_lines = [f"# {l}" for l in section_lines]
     lines.extend(section_lines)
     lines.append("")
 
@@ -126,15 +126,9 @@ branch_report = build_branch_report()</bpmn:script>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_05ccbhm</bpmn:incoming>
       <bpmn:outgoing>Flow_1lsziov</bpmn:outgoing>
-      <bpmn:script>def branch_line(line):
-    line = line.strip()
-    if len(line) == 0 or line.startswith("#"):
-        return None
-    return line
-
-def user_confirmed_branches():
-    lines = branch_report.split("\n")
-    return list(filter(None, map(branch_line, lines)))
+      <bpmn:script>def user_confirmed_branches():
+    lines = [l.strip() for l in branch_report.splitlines() if not l.startswith("#")]
+    return [l for l in lines if len(l) &gt; 0]
 
 branches_to_delete = user_confirmed_branches()
 
