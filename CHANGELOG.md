@@ -1,5 +1,10 @@
 # CHANGELOG
 
+## v0.1.8
+
+1. Fixed issue when `$EDITOR` contained spaces
+1. Replaced map/filter calls with list comprehensions
+
 ## v0.1.7
 
 1. Removed hack when loading bpmn file content
