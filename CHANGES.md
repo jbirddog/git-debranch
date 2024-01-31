@@ -1,5 +1,11 @@
 # CHANGELOG
 
+## v0.1.9
+
+1. Moved argparse logic out of script task and into runner
+1. Added option --dump-spec to dump the workflow spec
+1. Bump to SpiffWorkflow XXX
+
 ## v0.1.8
 
 1. Fixed issue when `$EDITOR` contained spaces
