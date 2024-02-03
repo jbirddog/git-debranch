@@ -12,12 +12,12 @@ class WorkflowResult:
     stdout: str
     returncode: int
 
-def run(args):
+def run(argv):
     workflow = load_workflow()
 
     for task in workflow.get_tasks_iterator():
         if isinstance(task.task_spec, BpmnStartTask):
-            task.set_data(args=args)
+            task.set_data(argv=argv)
             break
     
     completed, data = run_workflow(workflow)

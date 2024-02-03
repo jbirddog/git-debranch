@@ -1,13 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:spiffworkflow="http://spiffworkflow.org/bpmn/schema/1.0/core" id="Definitions_96f6665" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="3.0.0-dev">
   <bpmn:process id="git-debranch" name="Git Debranch" isExecutable="true">
-    <bpmn:ioSpecification>
-      <bpmn:dataInput id="args" />
-      <bpmn:inputSet>
-        <bpmn:dataInputRefs>args</bpmn:dataInputRefs>
-      </bpmn:inputSet>
-      <bpmn:outputSet />
-    </bpmn:ioSpecification>
     <bpmn:startEvent id="StartEvent_1">
       <bpmn:outgoing>Flow_13piout</bpmn:outgoing>
     </bpmn:startEvent>
@@ -18,10 +11,10 @@
       <bpmn:extensionElements>
         <spiffworkflow:preScript>offline=args["offline"]</spiffworkflow:preScript>
       </bpmn:extensionElements>
-      <bpmn:incoming>Flow_13piout</bpmn:incoming>
+      <bpmn:incoming>Flow_0pk536n</bpmn:incoming>
       <bpmn:outgoing>Flow_1cuvdpi</bpmn:outgoing>
     </bpmn:callActivity>
-    <bpmn:sequenceFlow id="Flow_13piout" sourceRef="StartEvent_1" targetRef="Activity_19gnuol" />
+    <bpmn:sequenceFlow id="Flow_13piout" sourceRef="StartEvent_1" targetRef="Activity_0q80hqa" />
     <bpmn:sequenceFlow id="Flow_1026mcr" sourceRef="Activity_0k872kx" targetRef="Activity_10dkgjv" />
     <bpmn:callActivity id="Activity_0k872kx" name="Parse branches" calledElement="branch_parser">
       <bpmn:incoming>Flow_1cuvdpi</bpmn:incoming>
@@ -41,15 +34,32 @@
       <bpmn:outgoing>Flow_1uy858t</bpmn:outgoing>
     </bpmn:callActivity>
     <bpmn:sequenceFlow id="Flow_1cuvdpi" sourceRef="Activity_19gnuol" targetRef="Activity_0k872kx" />
+    <bpmn:sequenceFlow id="Flow_0pk536n" sourceRef="Activity_0q80hqa" targetRef="Activity_19gnuol" />
+    <bpmn:scriptTask id="Activity_0q80hqa" name="Normalize args">
+      <bpmn:incoming>Flow_13piout</bpmn:incoming>
+      <bpmn:outgoing>Flow_0pk536n</bpmn:outgoing>
+      <bpmn:script>args = {
+    "offline": False,
+    "dry_run": False,
+}
+
+arg_map = {
+    "--offline": "offline",
+    "--dry-run": "dry_run",
+}
+
+for arg in argv[1:]:
+    if arg not in arg_map:
+        print(f"Unknown arg '{arg}'")
+        continue
+    args[arg_map[arg]] = True
+
+del arg_map
+del argv</bpmn:script>
+    </bpmn:scriptTask>
   </bpmn:process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_1">
     <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="git-debranch">
-      <bpmndi:BPMNShape id="DataInput-612128853-1DI" bpmnElement="args">
-        <dc:Bounds x="322" y="-65" width="36" height="50" />
-      </bpmndi:BPMNShape>
-      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
-        <dc:Bounds x="402" y="162" width="36" height="36" />
-      </bpmndi:BPMNShape>
       <bpmndi:BPMNShape id="Event_1wlwe0w_di" bpmnElement="Event_1wlwe0w">
         <dc:Bounds x="1022" y="156" width="36" height="36" />
       </bpmndi:BPMNShape>
@@ -69,9 +79,16 @@
         <dc:Bounds x="890" y="134" width="100" height="80" />
         <bpmndi:BPMNLabel />
       </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="292" y="162" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Activity_0znqd4q_di" bpmnElement="Activity_0q80hqa">
+        <dc:Bounds x="350" y="140" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge id="Flow_13piout_di" bpmnElement="Flow_13piout">
-        <di:waypoint x="438" y="180" />
-        <di:waypoint x="480" y="180" />
+        <di:waypoint x="328" y="180" />
+        <di:waypoint x="350" y="180" />
       </bpmndi:BPMNEdge>
       <bpmndi:BPMNEdge id="Flow_1026mcr_di" bpmnElement="Flow_1026mcr">
         <di:waypoint x="710" y="174" />
@@ -88,6 +105,10 @@
       <bpmndi:BPMNEdge id="Flow_1cuvdpi_di" bpmnElement="Flow_1cuvdpi">
         <di:waypoint x="580" y="177" />
         <di:waypoint x="610" y="177" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_0pk536n_di" bpmnElement="Flow_0pk536n">
+        <di:waypoint x="450" y="180" />
+        <di:waypoint x="480" y="180" />
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
