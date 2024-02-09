@@ -1,1 +1,1 @@
-SpiffWorkflow==3.0.0rc0
+SpiffWorkflow==3.0.0rc2
