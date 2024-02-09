@@ -17,7 +17,8 @@
           </spiffworkflow:parameters>
         </spiffworkflow:serviceTaskOperator>
         <spiffworkflow:preScript>spawn_args = ["git", "fetch", "-p"]</spiffworkflow:preScript>
-        <spiffworkflow:postScript>del(spawn_args)</spiffworkflow:postScript>
+        <spiffworkflow:postScript>del(spawn_args)
+del(result)</spiffworkflow:postScript>
       </bpmn:extensionElements>
       <bpmn:incoming>Flow_1pz1noe</bpmn:incoming>
       <bpmn:outgoing>Flow_1ogqfb8</bpmn:outgoing>

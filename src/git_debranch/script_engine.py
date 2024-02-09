@@ -1,7 +1,7 @@
 import json
 import subprocess
 
-from SpiffWorkflow.bpmn.PythonScriptEngine import PythonScriptEngine
+from SpiffWorkflow.bpmn.script_engine import PythonScriptEngine
 
 class CustomScriptEngine(PythonScriptEngine):
     def call_service(self, operation_name, operation_params, task_data):
