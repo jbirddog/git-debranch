@@ -4,7 +4,7 @@
 
 1. Moved argparse logic out of script task and into runner
 1. Added option --dump-spec to dump the workflow spec
-1. Bump to SpiffWorkflow XXX
+1. Bump to SpiffWorkflow 3.0.0rc2
 
 ## v0.1.8
 
