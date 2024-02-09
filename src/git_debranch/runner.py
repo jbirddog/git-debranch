@@ -8,7 +8,7 @@ from git_debranch.loader import load_manual_task_config
 
 def run_workflow(workflow):
     while not workflow.is_completed():
-        tasks = workflow.get_tasks(TaskState.READY)
+        tasks = workflow.get_tasks(state=TaskState.READY)
         task = tasks[0] if len(tasks) > 0 else None
         if task is None:
             break
